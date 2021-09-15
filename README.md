@@ -22,7 +22,7 @@ Hunter.io is a revamp of the classic snake game introducing multiplayer, powerup
 - Random spawn
 
 ##### Game creation is still in progress:
-* The following is dev plan *
+###### The following is dev plan
 - [ ] Login/Register + authentication
 - [ ] Solo Snake Game
 - [ ] Adding mulitplayer functionality: 1v1
