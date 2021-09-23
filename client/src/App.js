@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { LandingPage } from './pages/landing-page';
 import "./App.css";
 import { SuccessLogin } from './pages/success-login';
+// import gameCanvas from './pages/gameCanvas';
 import { ProtectedRoute } from './components/protected-route';
 
 function App() {
