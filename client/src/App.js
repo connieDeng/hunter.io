@@ -5,6 +5,10 @@ import "./App.css";
 import { SuccessLogin } from './pages/success-login';
 // import gameCanvas from './pages/gameCanvas';
 import { ProtectedRoute } from './components/protected-route';
+import io from "socket.io-client";
+
+// individual socket connection to server
+const socket = io.connect("http://localhost:4000");
 
 function App() {
 

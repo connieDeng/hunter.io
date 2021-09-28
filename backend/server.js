@@ -9,7 +9,18 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const app = express();
 const User = require("./user");
+const http = require("http");
+const { Server } = require("socket.io");
+const server = http.createServer(app);
+
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000"
+  }
+});
+
+
 mongoose.connect(
   "mongodb+srv://admin:HunterioPassword@cluster0.37i56.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   {
@@ -74,11 +85,21 @@ app.post("/register", (req, res) => {
     }
   });
 });
+
+io.on("connection", (socket) => {// Listens for client for connection and disconnection
+  console.log("User connected: " + socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected:", socket.id);
+  });
+});
+
 app.get("/user", (req, res) => {
   res.send(req.user); // The req.user stores the entire user that has been authenticated inside of it.
 });
 //----------------------------------------- END OF ROUTES---------------------------------------------------
+
 //Start Server
-app.listen(4000, () => {
+server.listen(4000, () => {
   console.log("Server Has Started");
 });
