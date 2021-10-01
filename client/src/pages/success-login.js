@@ -5,10 +5,11 @@ import {
     APPLE_START,
     SCALE,
     SPEED,
-    DIRECTIONS
+    DIRECTIONS,
   } from "./constants";
 import auth from './../components/auth';
 import { useInterval } from "./useInterval";
+import { findNextStep } from "./snake-movement";
 
 export const SuccessLogin = (props) => {
     const canvasRef = useRef();
@@ -17,7 +18,6 @@ export const SuccessLogin = (props) => {
     const [dir, setDir] = useState([0, -1]);
     const [speed, setSpeed] = useState(null);
     const [gameOver, setGameOver] = useState(false);
-    var myVar = 0;
 
     useInterval(() => gameLoop(), speed);
 
@@ -28,29 +28,7 @@ export const SuccessLogin = (props) => {
     
     const moveSnake = () =>
     {
-        let upleftright = [37, 38, 39]
-        let downleftright = [37, 39, 40]
-        let updownleft = [37, 38, 40]
-        let updownright = [38, 39, 40]
-
-        let nextmove = 0;
-        //down
-        if (dir == DIRECTIONS[40]) {
-        nextmove = downleftright[Math.floor(Math.random() * downleftright.length)];
-        }
-        //up
-        else if (dir == DIRECTIONS[38]) {
-        nextmove = upleftright[Math.floor(Math.random() * upleftright.length)];
-        }
-        //right
-        else if (dir == DIRECTIONS[39]) {
-        nextmove = updownright[Math.floor(Math.random() * updownright.length)];
-        }
-        //left
-        else {
-        nextmove = updownleft[Math.floor(Math.random() * updownleft.length)];
-        }
-        console.log("move", dir, DIRECTIONS[nextmove], nextmove)
+        let nextmove = findNextStep(dir, snake, apple);
         setDir(DIRECTIONS[nextmove]);
     }
 
@@ -68,7 +46,6 @@ export const SuccessLogin = (props) => {
 
     for (const segment of snk) {
         if (piece[0] === segment[0] && piece[1] === segment[1]) {
-        // console.log("HERE", piece, segment)
         return true;
         };
     }
@@ -92,7 +69,6 @@ export const SuccessLogin = (props) => {
     moveSnake();
     const newSnakeHead = [snakeCopy[0][0] + dir[0], snakeCopy[0][1] + dir[1]];
     snakeCopy.unshift(newSnakeHead);
-    console.log("collision", snakeCopy, dir)
     if (checkCollision(newSnakeHead)) {
         endGame();
     };
@@ -103,7 +79,7 @@ export const SuccessLogin = (props) => {
     const startGame = () => {
     setSnake(SNAKE_START);
     setApple(APPLE_START);
-    setDir([0, -1]);     //cause issues bc snake can do down as first move
+    setDir([0, -1]);
     setSpeed(SPEED);
     setGameOver(false);
     };
