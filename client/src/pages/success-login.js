@@ -21,39 +21,122 @@ export const SuccessLogin = (props) => {
 
     useInterval(() => gameLoop(), speed);
 
+
     const endGame = () => {
         setSpeed(null);
         setGameOver(true);
       };
     
-    const moveSnake = () =>
-    {
-        let upleftright = [37, 38, 39]
-        let downleftright = [37, 39, 40]
-        let updownleft = [37, 38, 40]
-        let updownright = [38, 39, 40]
 
-        let nextmove = 0;
+    const moveSnake = (snakeCopy) =>
+    {
+        let upleftright = [37,39,38]
+        let downleftright = [37, 39, 40]
+        let updownleft = [38, 40,37]
+        let updownright = [38,40,39]
+
+        let copy=snakeCopy;
+        let rand= Math.floor(Math.random() * 2);
+        let nextmove = 38;
         //down
-        if (dir == DIRECTIONS[40]) {
-        nextmove = downleftright[Math.floor(Math.random() * downleftright.length)];
+        if (dir === DIRECTIONS[40]) {
+            if(!checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            {
+                rand=Math.floor(Math.random()*2);
+                if(rand===0)
+                {
+                   nextmove=39;
+                }
+                else
+                {
+                    nextmove=37;
+                }
+            }
+            else
+            {
+                nextmove = upleftright[Math.floor(Math.random() * upleftright.length)];
+            }
+
         }
         //up
-        else if (dir == DIRECTIONS[38]) {
-        nextmove = upleftright[Math.floor(Math.random() * upleftright.length)];
+        else if (dir === DIRECTIONS[38]) {
+            if(!checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            {
+                if(rand===0)
+                {
+                    nextmove=39;
+                }
+                else
+                {
+                    nextmove=37;
+                }
+            }
+            else
+            {
+                nextmove = downleftright[Math.floor(Math.random() * downleftright.length)];
+            }
+            
         }
         //right
-        else if (dir == DIRECTIONS[39]) {
-        nextmove = updownright[Math.floor(Math.random() * updownright.length)];
+        else if (dir === DIRECTIONS[39]) {
+            if(!checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            {
+                if(rand===0)
+                {
+                    nextmove=38;
+                }
+                else
+                {
+                    nextmove=40;
+                }
+            }
+            else
+            {
+                nextmove = updownleft[Math.floor(Math.random() * updownleft.length)];
+            }
+
         }
         //left
-        else {
-        nextmove = updownleft[Math.floor(Math.random() * updownleft.length)];
+        else if(dir===DIRECTIONS[37]){
+            if(!checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            {
+                if(rand===0)
+                {
+                    nextmove=38;
+                }
+                else
+                {
+                    nextmove=40;
+                } 
+            }
+            else
+            {
+                nextmove = updownright[Math.floor(Math.random() * updownright.length)];
+            }
+ 
         }
+        else
+        {
+            //rand=Math.floor(Math.random()*4);
+            //nextmove=40-rand;
+        }
+
+        
+        
         console.log("move", dir, DIRECTIONS[nextmove], nextmove)
         setDir(DIRECTIONS[nextmove]);
     }
 
+
+
+    /*const reverseDir=(oldTail)=>
+    {
+        const snakeCopy = JSON.parse(JSON.stringify(snake));
+        snakeCopy.unshift(oldTail);
+        snakeCopy.slice(snakeCopy.length-2,snakeCopy.length-1);
+
+        setSnake(snakeCopy);
+    }*/
     const createApple = () =>
     apple.map((_a, i) => Math.floor(Math.random() * (CANVAS_SIZE[i] / SCALE)));
 
@@ -63,6 +146,7 @@ export const SuccessLogin = (props) => {
         piece[0] < 0 ||
         piece[1] * SCALE >= CANVAS_SIZE[1] ||
         piece[1] < 0
+        
     )
         return true;
 
@@ -87,15 +171,41 @@ export const SuccessLogin = (props) => {
     return false;
     };
 
+    let invin=false;
+
+    let hp=100;
     const gameLoop = () => {
     const snakeCopy = JSON.parse(JSON.stringify(snake));
-    moveSnake();
+    moveSnake(snakeCopy);
+    //const oldSnakeTail=[snakeCopy[snakeCopy.length-1][0], snakeCopy[snakeCopy.length-1][1]];
     const newSnakeHead = [snakeCopy[0][0] + dir[0], snakeCopy[0][1] + dir[1]];
+
     snakeCopy.unshift(newSnakeHead);
     console.log("collision", snakeCopy, dir)
-    if (checkCollision(newSnakeHead)) {
-        endGame();
-    };
+    if (checkCollision(newSnakeHead)) {            // when collide 
+
+        //if(hp>0 && invin===false)            // if not invincible then the snake take damage, become invincible and freeze for 1.5 second
+        //{
+            
+            /*setHp=(hp=hp-20);
+            reverseDir(oldSnakeTail);
+            
+            setSpeed(null);
+            invin=true;*/
+            endGame();
+            
+            
+            //setTimeout(()=>{invin = false; setSpeed(SPEED);},1500);
+       // }
+            
+
+        /*if(hp===0)
+        {
+            setSpeed(null);
+            endGame();
+        }*/
+    }
+
     if (!checkAppleCollision(snakeCopy)) snakeCopy.pop();
     setSnake(snakeCopy);
     };
@@ -131,6 +241,9 @@ export const SuccessLogin = (props) => {
             >
                 Logout
             </button>
+            <div>
+                <h1 >Health {hp} </h1>
+            </div>
             <div role="button" tabIndex="0">
                 <canvas
                     style={{ border: "1px solid black" }}
