@@ -47,7 +47,7 @@ export const SuccessLogin = (props) => {
             if(checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
             {
                 
-                if(checkCollision([copy[0][0]-1 , copy[0][1]+0]))
+                if(checkCollision([copy[0][0]-1 , copy[0][1]]))
                 {
                    nextmove=39;
                 }
@@ -64,9 +64,9 @@ export const SuccessLogin = (props) => {
         }
         //up
         else if (dir === DIRECTIONS[38]) {
-            if(checkCollision([copy[0][0]-1, copy[0][1]]))
+            if(checkCollision([copy[0][0]+dir[0], copy[0][1]+dir[1]]))
             {
-                if(checkCollision([copy[0][0] + DIRECTIONS[37][0], copy[0][1] + DIRECTIONS[37][1]]))
+                if(checkCollision([copy[0][0] -1, copy[0][1]]))
                 {
                     nextmove=39;
                 }
@@ -104,7 +104,7 @@ export const SuccessLogin = (props) => {
         else if(dir===DIRECTIONS[37]){
             if(checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
             {
-                if(checkCollision([copy[0][0] , copy[0][1] + 1]))
+                if(checkCollision([copy[0][0] , copy[0][1] +1]))
                 {
                     nextmove=38;
                 }
@@ -119,11 +119,7 @@ export const SuccessLogin = (props) => {
             }
  
         }
-        else
-        {
-            //rand=Math.floor(Math.random()*4);
-            //nextmove=40-rand;
-        }
+
 
         
         
