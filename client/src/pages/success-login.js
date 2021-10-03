@@ -27,7 +27,11 @@ export const SuccessLogin = (props) => {
         setGameOver(true);
       };
     
+    
+    const searchApple=(snakeCopy)=>
+    {
 
+    }
     const moveSnake = (snakeCopy) =>
     {
         let upleftright = [37,39,38]
@@ -37,13 +41,13 @@ export const SuccessLogin = (props) => {
 
         let copy=snakeCopy;
         let rand= Math.floor(Math.random() * 2);
-        let nextmove = 38;
+        let nextmove = 0;
         //down
         if (dir === DIRECTIONS[40]) {
-            if(!checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            if(checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
             {
-                rand=Math.floor(Math.random()*2);
-                if(rand===0)
+                
+                if(checkCollision([copy[0][0]-1 , copy[0][1]+0]))
                 {
                    nextmove=39;
                 }
@@ -54,15 +58,15 @@ export const SuccessLogin = (props) => {
             }
             else
             {
-                nextmove = upleftright[Math.floor(Math.random() * upleftright.length)];
+                nextmove = downleftright[Math.floor(Math.random() * downleftright.length)];
             }
 
         }
         //up
         else if (dir === DIRECTIONS[38]) {
-            if(!checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            if(checkCollision([copy[0][0]-1, copy[0][1]]))
             {
-                if(rand===0)
+                if(checkCollision([copy[0][0] + DIRECTIONS[37][0], copy[0][1] + DIRECTIONS[37][1]]))
                 {
                     nextmove=39;
                 }
@@ -73,15 +77,15 @@ export const SuccessLogin = (props) => {
             }
             else
             {
-                nextmove = downleftright[Math.floor(Math.random() * downleftright.length)];
+                nextmove = upleftright[Math.floor(Math.random() * upleftright.length)];
             }
             
         }
         //right
         else if (dir === DIRECTIONS[39]) {
-            if(!checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            if(checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
             {
-                if(rand===0)
+                if(checkCollision([copy[0][0], copy[0][1] + 1]))
                 {
                     nextmove=38;
                 }
@@ -92,15 +96,15 @@ export const SuccessLogin = (props) => {
             }
             else
             {
-                nextmove = updownleft[Math.floor(Math.random() * updownleft.length)];
+                nextmove = updownright[Math.floor(Math.random() * updownright.length)];
             }
 
         }
         //left
         else if(dir===DIRECTIONS[37]){
-            if(!checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            if(checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
             {
-                if(rand===0)
+                if(checkCollision([copy[0][0] , copy[0][1] + 1]))
                 {
                     nextmove=38;
                 }
@@ -111,7 +115,7 @@ export const SuccessLogin = (props) => {
             }
             else
             {
-                nextmove = updownright[Math.floor(Math.random() * updownright.length)];
+                nextmove = updownleft[Math.floor(Math.random() * updownright.length)];
             }
  
         }
@@ -213,7 +217,7 @@ export const SuccessLogin = (props) => {
     const startGame = () => {
     setSnake(SNAKE_START);
     setApple(APPLE_START);
-    setDir([0, -1]);     //cause issues bc snake can do down as first move
+    setDir(DIRECTIONS[38]);     //cause issues bc snake can do down as first move
     setSpeed(SPEED);
     setGameOver(false);
     };
