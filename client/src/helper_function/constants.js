@@ -3,13 +3,7 @@ const SNAKE_START = [
   [8, 7],
   [8, 8]
 ];
-
-const BOT_START = [
-  [10, 15],
-  [10, 15]
-];
-
-const APPLE_START = [8, 3];
+const APPLE_START = [4, 3];
 const SCALE = 40;
 const SPEED = 100;
 const DIRECTIONS = {
@@ -19,6 +13,15 @@ const DIRECTIONS = {
   39: [1, 0] // right
 };
 
+const upleft = [38, 37];
+const downleft = [40, 37];
+const upright = [38, 39];
+const downright = [40, 39];
+const up = [38];
+const down = [40];
+const left = [37];
+const right = [39];
+
 export {
   CANVAS_SIZE,
   SNAKE_START,
@@ -26,5 +29,14 @@ export {
   SCALE,
   SPEED,
   DIRECTIONS,
-  BOT_START
+  upleft,
+  upright,
+  downleft,
+  downright,
+  up,
+  down,
+  left,
+  right,
+  // DIRECTIONS_3PAIR,
+  // DIRECTIONS_2PAIR
 };
