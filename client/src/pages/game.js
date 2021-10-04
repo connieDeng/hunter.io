@@ -11,6 +11,8 @@ import {
 import auth from './../components/auth';
 import { useInterval } from "../helper_function/useInterval";
 import { BotSnake } from "../components/bot-snake";
+import { LandingPage } from "./landing-page";
+import socket from '../socket';
 
 export const Game = (props) => {
     const canvasRef = useRef();
@@ -80,6 +82,7 @@ export const Game = (props) => {
     return (
         <div>
             <div>You made it: maybe snake game should be here</div> 
+            
             <button
                 onClick={() => {
                 auth.logout(() => {

@@ -13,6 +13,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
+
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
 const io = new Server(server, {
   cors: {
@@ -86,18 +87,52 @@ app.post("/register", (req, res) => {
   });
 });
 
-io.on("connection", (socket) => {// Listens for client for connection and disconnection
-  console.log("User connected: " + socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("User Disconnected:", socket.id);
-  });
-});
 
 app.get("/user", (req, res) => {
   res.send(req.user); // The req.user stores the entire user that has been authenticated inside of it.
 });
 //----------------------------------------- END OF ROUTES---------------------------------------------------
+
+//SOCKET.IO 
+const listUserSocketID = new Map();
+
+const addClientToList = (SocketID,nickname) => {
+  listUserSocketID.set(SocketID,nickname);
+};
+
+const removeClientFromList = (SocketID) => {
+  listUserSocketID.delete(SocketID);
+};
+
+const setClientNickname = (SocketID,nickname) => {
+  listUserSocketID.set(SocketID,nickname);
+};
+
+io.on("connection", (socket) => {// Listens for client for connection and disconnection
+  var nickname = "";
+  console.log("User connected: " + socket.id);
+  addClientToList(socket.id, nickname);
+  console.log(listUserSocketID);
+  
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected:", socket.id);
+    removeClientFromList(socket.id);
+  });
+
+  socket.on("FFA_Joined",(nname) => {
+    socket.join(0);
+    nickname = nname;
+    setClientNickname(socket.id,nickname)
+    console.log("User: " + socket.id + " join FFA Room as " + nickname);
+  });
+
+  io.on("DisplayClients", () => {
+    io.emit(io.sockets.clients())
+  });
+
+  
+});
 
 //Start Server
 server.listen(4000, () => {

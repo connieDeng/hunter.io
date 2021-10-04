@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import auth from './../components/auth';
 import Axios from "axios";
+import socket from "../socket";
 
 
 export const LandingPage = (props) => {
@@ -28,6 +29,7 @@ export const LandingPage = (props) => {
             pathname: "/game",
             state : { nickname: nickname }
         });
+        socket.emit("FFA_Joined", nickname);
     }
    
     return(

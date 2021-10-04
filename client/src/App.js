@@ -6,10 +6,13 @@ import { SuccessLogin } from './pages/success-login';
 import { Game } from './pages/game';
 // import gameCanvas from './pages/gameCanvas';
 import { ProtectedRoute } from './components/protected-route';
-import io from "socket.io-client";
+import socket from "./socket";
 
 // individual socket connection to server
-const socket = io.connect("http://localhost:4000");
+//const socket = io.connect("http://localhost:4000");
+socket.on("connect", () => {
+  console.log("app connected:",socket.id)
+});
 
 function App() {
 
@@ -22,6 +25,7 @@ function App() {
         <Route path="*" component={() => "404 NOT FOUND"} />
       </Switch>
     </BrowserRouter>
+    
 
   );
 }
