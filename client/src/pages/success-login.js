@@ -28,10 +28,7 @@ export const SuccessLogin = (props) => {
       };
     
     
-    const searchApple=(snakeCopy)=>
-    {
-
-    }
+    
     const moveSnake = (snakeCopy) =>
     {
         let upleftright = [37,39,38]
@@ -42,87 +39,115 @@ export const SuccessLogin = (props) => {
         let copy=snakeCopy;
         let rand= Math.floor(Math.random() * 2);
         let nextmove = 0;
+
         //down
         if (dir === DIRECTIONS[40]) {
-            if(checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1])
             {
-                
-                if(checkCollision([copy[0][0]-1 , copy[0][1]]))
+                console.log('boarder down');
+                if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]||0>=copy[0][0])
                 {
-                   nextmove=39;
+                
+                   nextmove=40;
                 }
                 else
                 {
-                    nextmove=37;
+                    if(Math.floor((CANVAS_SIZE[0]/SCALE)/2)<=copy[0][0])
+                    {
+                        nextmove=39;
+                    }
+                    else
+                    {
+                        nextmove=37;
+                    }
+                    
                 }
             }
-            else
-            {
+            else{
                 nextmove = downleftright[Math.floor(Math.random() * downleftright.length)];
-            }
+            }   
+
+         
+            
+            
 
         }
         //up
         else if (dir === DIRECTIONS[38]) {
-            if(checkCollision([copy[0][0]+dir[0], copy[0][1]+dir[1]]))
+            if(copy[0][1]<= 0)
             {
-                if(checkCollision([copy[0][0] -1, copy[0][1]]))
+                console.log('boarder up');
+                if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]||0>=copy[0][0])
                 {
-                    nextmove=39;
+                    nextmove=40;
                 }
                 else
                 {
+                    //if(Math.floor((CANVAS_SIZE[0]/SCALE)/2)<=copy[0][0])
+
+
                     nextmove=37;
+
                 }
             }
             else
             {
+
                 nextmove = upleftright[Math.floor(Math.random() * upleftright.length)];
             }
+            
+            
             
         }
         //right
         else if (dir === DIRECTIONS[39]) {
-            if(checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+
+             
+        if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0])
+        {
+            console.log('boarder right');
+            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]||0<=[0][1])
             {
-                if(checkCollision([copy[0][0], copy[0][1] + 1]))
-                {
-                    nextmove=38;
-                }
-                else
-                {
-                    nextmove=40;
-                }
+                nextmove=37;
             }
             else
             {
-                nextmove = updownright[Math.floor(Math.random() * updownright.length)];
+                nextmove=38;
             }
+        }
+        else{
+            nextmove = updownright[Math.floor(Math.random() * updownright.length)];
+        }
+            
+            
 
         }
         //left
         else if(dir===DIRECTIONS[37]){
-            if(checkCollision([copy[0][0] + dir[0], copy[0][1] + dir[1]]))
+            
+        if(copy[0][0]<=0)
+        {
+            console.log('boarder left');
+            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]||0<=[0][1])
             {
-                if(checkCollision([copy[0][0] , copy[0][1] +1]))
-                {
-                    nextmove=38;
-                }
-                else
-                {
-                    nextmove=40;
-                } 
+                nextmove=39;
             }
             else
             {
-                nextmove = updownleft[Math.floor(Math.random() * updownright.length)];
-            }
- 
+                nextmove=40;
+            } 
         }
+        else
+        {
+            nextmove = updownleft[Math.floor(Math.random() * updownright.length)];
+            
+        }
+    }  
+     
+
+ 
 
 
-        
-        
         console.log("move", dir, DIRECTIONS[nextmove], nextmove)
         setDir(DIRECTIONS[nextmove]);
     }
@@ -181,7 +206,7 @@ export const SuccessLogin = (props) => {
     const newSnakeHead = [snakeCopy[0][0] + dir[0], snakeCopy[0][1] + dir[1]];
 
     snakeCopy.unshift(newSnakeHead);
-    console.log("collision", snakeCopy, dir)
+    console.log('x:' , snakeCopy[0][0],'y:',snakeCopy[0][1])
     if (checkCollision(newSnakeHead)) {            // when collide 
 
         //if(hp>0 && invin===false)            // if not invincible then the snake take damage, become invincible and freeze for 1.5 second
