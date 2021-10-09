@@ -42,48 +42,50 @@ export const SuccessLogin = (props) => {
 
         //down
         if (dir === DIRECTIONS[40]) {
-            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1])
+            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]+dir[1])
             {
                 console.log('boarder down');
-                if(0>=copy[0][0])
+                if(0>=copy[0][0]+dir[0])
                 {
                 
                    nextmove=39;
                 }
-                else if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0])
+                else if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]+dir[0])
                 {
                    
                     nextmove=37;
               
                     
                 }
+                else
+                {
+                    nextmove=39;
+                }
             }
-            else{
+            else
+            {
                 nextmove = downleftright[Math.floor(Math.random() * downleftright.length)];
-            }   
-
-         
-            
-            
-
+            }
         }
         //up
         else if (dir === DIRECTIONS[38]) {
-            if(copy[0][1]<= 0)
+            if(copy[0][1]+dir[1]<= 0)
             {
                 console.log('boarder up');
-                if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]||0>=copy[0][0])
+                if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]+dir[0])
                 {
-                    nextmove=40;
+                    nextmove=37;
+                }
+                else if(0>=copy[0][0]+dir[0])
+                {
+                    nextmove=39;
+
                 }
                 else
                 {
-                    //if(Math.floor((CANVAS_SIZE[0]/SCALE)/2)<=copy[0][0])
-
-
                     nextmove=37;
-
                 }
+
             }
             else
             {
@@ -98,12 +100,16 @@ export const SuccessLogin = (props) => {
         else if (dir === DIRECTIONS[39]) {
 
              
-        if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0])
+        if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]+dir[0])
         {
             console.log('boarder right');
-            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]||0>=copy[0][1])
+            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]+dir[1])
             {
-                nextmove=37;
+                nextmove=38;
+            }
+            else if(0>=copy[0][1]+dir[1])
+            {
+                nextmove=40;
             }
             else
             {
@@ -120,17 +126,22 @@ export const SuccessLogin = (props) => {
         //left
         else if(dir===DIRECTIONS[37]){
             
-        if(copy[0][0]<=0)
+        if(copy[0][0]+dir[0]<=0)
         {
             console.log('boarder left');
-            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]||0>=copy[0][1])
+            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]+dir[1])
             {
-                nextmove=39;
+                nextmove=38;
             }
-            else
+            else if(0>=copy[0][1]+dir[1])
             {
                 nextmove=40;
             } 
+            else{
+
+                nextmove=38;
+            }
+
         }
         else
         {
