@@ -45,12 +45,12 @@ export const SuccessLogin = (props) => {
             if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]+dir[1])
             {
                 console.log('boarder down');
-                if(0>=copy[0][0]+dir[0])
+                if(0>=copy[0][0])
                 {
                 
                    nextmove=39;
                 }
-                else if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]+dir[0])
+                else if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0])
                 {
                    
                     nextmove=37;
@@ -62,6 +62,15 @@ export const SuccessLogin = (props) => {
                     nextmove=39;
                 }
             }
+            else if(0>=copy[0][0])
+            {
+            
+               nextmove=39;
+            }
+            else if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][0])
+            {
+                nextmove=37
+            }
             else
             {
                 nextmove = downleftright[Math.floor(Math.random() * downleftright.length)];
@@ -72,11 +81,11 @@ export const SuccessLogin = (props) => {
             if(copy[0][1]+dir[1]<= 0)
             {
                 console.log('boarder up');
-                if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]+dir[0])
+                if((CANVAS_SIZE[0]/SCALE)-0<=copy[0][0])
                 {
                     nextmove=37;
                 }
-                else if(0>=copy[0][0]+dir[0])
+                else if(1>=copy[0][0])
                 {
                     nextmove=39;
 
@@ -87,6 +96,16 @@ export const SuccessLogin = (props) => {
                 }
 
             }
+            else if(0>=copy[0][0])
+            {
+            
+               nextmove=39;
+            }
+            else if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][0])
+            {
+                nextmove=37
+            }
+
             else
             {
 
@@ -103,11 +122,11 @@ export const SuccessLogin = (props) => {
         if((CANVAS_SIZE[0]/SCALE)-1<=copy[0][0]+dir[0])
         {
             console.log('boarder right');
-            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]+dir[1])
+            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1])
             {
                 nextmove=38;
             }
-            else if(0>=copy[0][1]+dir[1])
+            else if(0>=copy[0][1])
             {
                 nextmove=40;
             }
@@ -115,6 +134,15 @@ export const SuccessLogin = (props) => {
             {
                 nextmove=38;
             }
+        }
+        else if(0>=copy[0][1])
+        {
+        
+           nextmove=40;
+        }
+        else if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1])
+        {
+            nextmove=38;
         }
         else{
             nextmove = updownright[Math.floor(Math.random() * updownright.length)];
@@ -129,11 +157,11 @@ export const SuccessLogin = (props) => {
         if(copy[0][0]+dir[0]<=0)
         {
             console.log('boarder left');
-            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1]+dir[1])
+            if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1])
             {
                 nextmove=38;
             }
-            else if(0>=copy[0][1]+dir[1])
+            else if(1>=copy[0][1])
             {
                 nextmove=40;
             } 
@@ -142,6 +170,15 @@ export const SuccessLogin = (props) => {
                 nextmove=38;
             }
 
+        }
+        else if(0>=copy[0][1])
+        {
+        
+           nextmove=40;
+        }
+        else if((CANVAS_SIZE[1]/SCALE)-1<=copy[0][1])
+        {
+            nextmove=38;
         }
         else
         {
