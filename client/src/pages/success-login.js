@@ -85,7 +85,7 @@ export const SuccessLogin = (props) => {
             console.log(Player);
         });
         console.log("Player: ", Player)
-        if (Player === 1){
+        // if (Player === 1){
             const snakeCopy = JSON.parse(JSON.stringify(snake));
             moveSnake();
             const newSnakeHead = [snakeCopy[0][0] + dir[0], snakeCopy[0][1] + dir[1]];
@@ -96,7 +96,7 @@ export const SuccessLogin = (props) => {
             if (!checkAppleCollision(snakeCopy)) snakeCopy.pop();
             setSnake(snakeCopy);
             socket.emit("gameUpdated", (snake, apple, gameOver));
-        }
+        // }
 
     };
 

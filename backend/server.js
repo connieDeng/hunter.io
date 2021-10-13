@@ -13,6 +13,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
+const user_snake = require("./snake-setup")
 
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
 const io = new Server(server, {
