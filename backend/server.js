@@ -94,26 +94,27 @@ app.get("/user", (req, res) => {
 //----------------------------------------- END OF ROUTES---------------------------------------------------
 
 //SOCKET.IO 
-const listUserSocketID = new Map();
+var listUserSocketID = {};
+var Player = 0
 
-const addClientToList = (SocketID,nickname) => {
-  listUserSocketID.set(SocketID,nickname);
+const addClientToList = (SocketID) => {
+  Player += 1;
+  listUserSocketID[SocketID] = Player;
 };
 
 const removeClientFromList = (SocketID) => {
-  listUserSocketID.delete(SocketID);
+  delete listUserSocketID[SocketID]
+  Player -= 1;
 };
 
 const setClientNickname = (SocketID,nickname) => {
-  listUserSocketID.set(SocketID,nickname);
+  console.log(nickname, "???")
+  listUserSocketID[SocketID] = nickname; 
 };
 
 io.on("connection", (socket) => {// Listens for client for connection and disconnection
-  var nickname = "";
   console.log("User connected: " + socket.id);
-  addClientToList(socket.id, nickname);
-  console.log(listUserSocketID);
-  
+  addClientToList(socket.id);
 
   socket.on("disconnect", () => {
     console.log("User Disconnected:", socket.id);
@@ -121,15 +122,26 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
   });
 
   socket.on("FFA_Joined",(nname) => {
-    socket.join(0);
-    nickname = nname;
-    setClientNickname(socket.id,nickname)
-    console.log("User: " + socket.id + " join FFA Room as " + nickname);
+    socket.join("FFA");
+    //setClientNickname(socket.id,nname);
+    console.log("User: " + socket.id + " join FFA Room as " + nname + " as Player: "+ listUserSocketID[socket.id]);
   });
 
-  io.on("DisplayClients", () => {
-    io.emit(io.sockets.clients())
+  socket.on("DisplayClients", () => {
+    console.log(listUserSocketID);
+    socket.emit("returnUsers", listUserSocketID);
   });
+
+  socket.on("gameUpdated", (snake, apple, gameOver) => {
+    socket.to("FFA").emit("UpdateReceived",{snake, apple, gameOver})
+    console.log("update received")
+  });
+
+  socket.on("PlayersMove", () => {
+    socket.to("FFA").emit("PlayerTurn", listUserSocketID[socket.id])
+    
+  });
+
 
   
 });

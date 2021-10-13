@@ -26,12 +26,11 @@ export const LandingPage = (props) => {
     const submitToFFA = (nickname) =>{ 
         console.log(nickname)
         history.push({
-            pathname: "/game",
+            pathname: "/hunter.io",
             state : { nickname: nickname }
         });
         socket.emit("FFA_Joined", nickname);
     }
-   
     return(
         <div>
             <div>Hunter.io landing page</div>
