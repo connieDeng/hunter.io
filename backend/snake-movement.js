@@ -10,7 +10,7 @@ import {
     right,
     // DIRECTIONS_2PAIR,
     // DIRECTIONS_3PAIR,
-  } from "./../helper_function/constants";
+  } from "./constants";
 
 export function findNextStep(dir, snake, apple) {
 

@@ -22,7 +22,7 @@ const down = [40];
 const left = [37];
 const right = [39];
 
-export {
+module.exports = {
   CANVAS_SIZE,
   SNAKE_START,
   APPLE_START,

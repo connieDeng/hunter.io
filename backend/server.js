@@ -13,7 +13,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
 
-const user_snake = require("./snake-setup")
+const usersnake = require("./snake-setup")
 
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
 const io = new Server(server, {
@@ -95,55 +95,48 @@ app.get("/user", (req, res) => {
 //----------------------------------------- END OF ROUTES---------------------------------------------------
 
 //SOCKET.IO 
-var listUserSocketID = {};
-var Player = 0
-
-const addClientToList = (SocketID) => {
-  Player += 1;
-  listUserSocketID[SocketID] = Player;
-};
-
-const removeClientFromList = (SocketID) => {
-  delete listUserSocketID[SocketID]
-  Player -= 1;
-};
-
-const setClientNickname = (SocketID,nickname) => {
-  console.log(nickname, "???")
-  listUserSocketID[SocketID] = nickname; 
-};
+var Players = {};
+var PlayerCount = 0
 
 io.on("connection", (socket) => {// Listens for client for connection and disconnection
   console.log("User connected: " + socket.id);
-  addClientToList(socket.id);
 
   socket.on("disconnect", () => {
     console.log("User Disconnected:", socket.id);
-    removeClientFromList(socket.id);
+    // Loop and disconnect them for the Players array
   });
 
   socket.on("FFA_Joined",(nname) => {
     socket.join("FFA");
     //setClientNickname(socket.id,nname);
-    console.log("User: " + socket.id + " join FFA Room as " + nname + " as Player: "+ listUserSocketID[socket.id]);
+    console.log("User: " + socket.id + " join FFA Room as " + nname);
+  });
+
+  socket.on("checkPlayer", (id) => {//returns player obj, otherwise makes new player and increment count
+    console.log("Create player received", Players[id])
+    if(Players[id] !== undefined){
+      socket.to("FFA").emit("playerCreated", Players[id])
+    }
+    else{
+      PlayerCount+=1;
+      const player = new usersnake.user_snake(id,PlayerCount);
+      Players[id] = player;
+      socket.to("FFA").emit("playerCreated", Players[id]);
+    }
   });
 
   socket.on("DisplayClients", () => {
-    console.log(listUserSocketID);
-    socket.emit("returnUsers", listUserSocketID);
+    console.log(Player);
+    socket.emit("returnUsers", Players);
   });
 
-  socket.on("gameUpdated", (snake, apple, gameOver) => {
-    socket.to("FFA").emit("UpdateReceived",{snake, apple, gameOver})
-    console.log("update received")
+  socket.on("gameUpdated", (snake, apple) => {
+    socket.to("FFA").emit("UpdateReceived",{snake, apple})
   });
 
   socket.on("PlayersMove", () => {
-    socket.to("FFA").emit("PlayerTurn", listUserSocketID[socket.id])
-    
+    socket.to("FFA").emit("PlayerTurn", Player[socket.id]) 
   });
-
-
   
 });
 
