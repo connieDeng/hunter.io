@@ -115,13 +115,13 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
   socket.on("checkPlayer", (id) => {//returns player obj, otherwise makes new player and increment count
     console.log("Create player received", Players[id])
     if(Players[id] !== undefined){
-      socket.to("FFA").emit("playerCreated", Players[id])
+      socket.emit("playerCreated", Players[id]);
     }
     else{
       PlayerCount+=1;
       const player = new usersnake.user_snake(id,PlayerCount);
       Players[id] = player;
-      socket.to("FFA").emit("playerCreated", Players[id]);
+      socket.emit("playerCreated", Players[id]);
     }
   });
 
@@ -130,8 +130,8 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     socket.emit("returnUsers", Players);
   });
 
-  socket.on("gameUpdated", (snake, apple) => {
-    socket.to("FFA").emit("UpdateReceived",{snake, apple})
+  socket.on("gameUpdated", (player) => {
+    socket.broadcast.emit("UpdateReceived",player);
   });
 
   socket.on("PlayersMove", () => {

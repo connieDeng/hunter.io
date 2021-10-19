@@ -11,7 +11,6 @@ import auth from './../components/auth';
 import { useInterval } from "./../helper_function/useInterval";
 import { findNextStep } from "./snake-movement";
 import socket from "../socket";
-var Player = 0;
 
 export const SuccessLogin = (props) => {
     const canvasRef = useRef();
@@ -21,28 +20,17 @@ export const SuccessLogin = (props) => {
     const [speed, setSpeed] = useState(null);
     const [gameOver, setGameOver] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
-
+    var currentPlayer = undefined;
     //useInterval(() => gameLoop(), speed);
     
-    socket.emit("checkPlayer",(socket.id)); //Check Player, if its the first player, initialize the board
-    socket.on("playerCreated", (player) => {
-        console.log("Start Game received")
-        setSnake(player.start);
-        //setApple(apple);
-        setDir(player.direction);
-        setSpeed(player.speed);
+    socket.on("UpdateReceived", (otherplayer) =>{
+        console.log("Game update received")
+        setSnake(otherplayer.start);
+        //setApple(otherapple);
+        setDir(otherplayer.direction);
+        setSpeed(otherplayer.speed);
         setGameStarted(true);
-    });
-    
-    /*
-    socket.emit("getBoardInfo")
-    socket.on("playerInfo", (player) => {
-
-    });
-    socket.on("updateReceived",() => {
-
-    });
-    */
+    })
 
     const ShowUsers = () => {
         console.log("return worked")
@@ -55,22 +43,23 @@ export const SuccessLogin = (props) => {
     };
 
     const startGame = () => { 
-        socket.emit("checkPlayer", (socket.id));
+        socket.emit("checkPlayer",(socket.id)); //Check Player, if its the first player, initialize the board
         socket.on("playerCreated", (player) => {
-            console.log("Start Game received")
+            currentPlayer = player
             setSnake(player.start);
-            //setApple(apple);
+            setApple(apple);
             setDir(player.direction);
             setSpeed(player.speed);
             setGameStarted(true);
-        });
-        
+            socket.emit("gameUpdated", (player));
+        }); 
     };
 
     const endGame = () => {
         setSpeed(null);
         setGameOver(true);
       };
+
 
     useEffect(() => {
         const context = canvasRef.current.getContext("2d");
@@ -79,13 +68,10 @@ export const SuccessLogin = (props) => {
         if(gameStarted === true){
             context.fillStyle = "pink";
             snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
-            context.fillStyle = "lightblue";
-            context.fillRect(apple[0], apple[1], 1, 1);
-        }
-
-        socket.emit("gameUpdated");
-        
-    }, [snake, apple,gameStarted]);
+            //context.fillStyle = "lightblue";
+            //context.fillRect(apple[0], apple[1], 1, 1);
+        }   
+    }, [snake, apple, gameStarted]);
 
     return (
         <div>
