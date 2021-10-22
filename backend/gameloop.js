@@ -2,9 +2,9 @@ const constant=require("./constants")
 
 const checkCollision = (piece, snk = snake) => {
         if (
-            piece[0] * SCALE >= CANVAS_SIZE[0] ||
+            piece[0] * constant.SCALE >= constant.CANVAS_SIZE[0] ||
             piece[0] < 0 ||
-            piece[1] * SCALE >= CANVAS_SIZE[1] ||
+            piece[1] * constant.SCALE >= constant.CANVAS_SIZE[1] ||
             piece[1] < 0
             
         )
@@ -17,15 +17,17 @@ const checkCollision = (piece, snk = snake) => {
             };
         }
         return false;
-    }
+}
 
-    useEffect(() => {
+useEffect(() => {
         const context = canvasRef.current.getContext("2d");
         context.setTransform(SCALE, 0, 0, SCALE, 0, 0);
         context.clearRect(0, 0, window.innerWidth, window.innerHeight);
         context.fillStyle = "pink";
-    })
-gameloop=(snake)=>
+},[snake.apple,gameOver]);
+
+
+    gameloop=(snake)=>
 {
     const snakeCopy= JSON.parse(JASON.stringify(snake));
     moveSnake(snakeCopy);
@@ -40,3 +42,7 @@ gameloop=(snake)=>
     setSnake(snakeCopy);
     
 }
+
+module.exports.checkCollision=checkCollision;
+module.exports.gameloop=this.gameloop;
+module.exports.useEffect=this.useEffect;
