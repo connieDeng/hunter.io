@@ -31,6 +31,7 @@ class user_snake {
         let newSnakeHead = [this.body[0][0] + this.direction[0], this.body[0][1] + this.direction[1]];
         this.body.unshift(newSnakeHead)
     }
+
 }
 
 module.exports = {
