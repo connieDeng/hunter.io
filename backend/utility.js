@@ -8,23 +8,23 @@ const getRandomId = function (AllSnakes) {
 
 const getEmptyCoords = function (stateBoard) {
     // console.log(stateBoard)
-    temp_x = Math.floor(Math.random() * 20);
-    temp_y = Math.floor(Math.random() * 20);
-    console.log(temp_x, temp_y)
-    console.log(stateBoard[5])
+    temp_x = Math.floor(Math.random() * stateBoard.length);
+    temp_y = Math.floor(Math.random() * stateBoard[0].length);
     
-    // while (stateBoard[temp_x, temp_y] !== 0 && stateBoard[temp_x, temp_y+1] !== 0){
-    //     temp_x = Math.floor(Math.random() * 20);
-    //     temp_y = Math.floor(Math.random() * 20);
-    // } 
+    while (stateBoard[temp_x][temp_y] !== -1 && stateBoard[temp_x+1][temp_y] !== -1){
+        temp_x = Math.floor(Math.random() * 20);
+        temp_y = Math.floor(Math.random() * 20);
+    } 
     
-    // return [[temp_x, temp_y], [temp_x, temp_y+1]]
-    // return 0
+    return [[temp_x, temp_y], [temp_x+1, temp_y]]
 }
 
-// let arr = new Array(10).fill(1)
-// arr[7] = 0
-// console.log(getRandomId(arr))
-// console.log(arr.includes(0))
+const createStateBoard = function (rows, cols) {
+    var stateBoard = [];
+    for(var i=0; i<rows; i++) {
+        stateBoard[i] = new Array(cols).fill(-1);
+    }
+    return stateBoard
+}
 
-module.exports = {getRandomId, getEmptyCoords}
+module.exports = {getRandomId, getEmptyCoords, createStateBoard}
