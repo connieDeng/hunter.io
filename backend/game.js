@@ -1,10 +1,10 @@
 const Utility = require("./utility")
 
-// LOGIC FOR GAME
+let stateBoard = Utility.createStateBoard(20,20)
+
 class Game {
     constructor() {
       this.players = new Array(10).fill(0)
-      this.stateBoard = Utility.createStateBoard(20,20)
     }
     
     createSnake(type){
@@ -25,16 +25,14 @@ class Game {
       let id = snake.id;
       this.players[id] = snake;
 
-      let start_cords = Utility.getEmptyCoords(this.stateBoard);
+      let start_cords = Utility.getEmptyCoords(stateBoard);
       start_cords.forEach(element => snake.cords.push(element));
       start_cords.forEach(element => {
         console.log(element[0], element[1])
-        this.stateBoard[element[0]][element[1]] = id;
+        stateBoard[element[0]][element[1]] = id;
       });
       console.log("snake " + snake.id + " coordinates are: " + snake.cords);
-      console.table(this.stateBoard)
     }
-
 }
 
 // GENERAL SNAKE
@@ -54,12 +52,16 @@ class Snake extends Game {
 
   move() {
     // up
+    // console.log(this.cords)
+    console.log('this is the passed stateboard to move')
+    console.table(stateBoard)
+
     if (this.dir == "up"){
-      this.cords.forEach(element => {
-        element[0] += 1
-        console.log(element)
-        // this.stateBoard[element[0]][element[1]] = id;
-      });
+      let move_cord = this.cords.pop()
+      stateBoard[move_cord[0]][move_cord[1]] = -1;
+      console.log(this.cords[0][0]-1, this.cords[0][1])
+      this.cords.unshift([this.cords[0][0], this.cords[0][1]])
+      stateBoard[this.cords[0][0]-1][this.cords[0][1]] = '0';
     } 
     // down
     else if (this.dir == "down"){
@@ -79,14 +81,21 @@ class Snake extends Game {
         console.log(element)
       });
     }
+    console.log(this.cords)
+
+    console.log("updated state board")
+    console.table(stateBoard)
   }
   
 }
 
 game = new Game()
-let bot1 = game.createSnake("bot")
-game.addSnake(bot1)
+// let bot1 = game.createSnake("bot")
+// game.addSnake(bot1)
 let bot2 = game.createSnake("bot")
 game.addSnake(bot2)
+// let bot3 = game.createSnake("bot")
+// game.addSnake(bot3)
 bot2.move("up")
+// bot2.move("up")
 module.exports = Game;
