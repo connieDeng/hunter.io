@@ -51,17 +51,14 @@ class Snake extends Game {
   }
 
   move() {
+    console.log("in move, previous cords", this.cords)
     // up
-    // console.log(this.cords)
-    console.log('this is the passed stateboard to move')
-    console.table(stateBoard)
-
     if (this.dir == "up"){
       let move_cord = this.cords.pop()
       stateBoard[move_cord[0]][move_cord[1]] = -1;
       console.log(this.cords[0][0]-1, this.cords[0][1])
-      this.cords.unshift([this.cords[0][0], this.cords[0][1]])
-      stateBoard[this.cords[0][0]-1][this.cords[0][1]] = '0';
+      this.cords.unshift([this.cords[0][0]-1, this.cords[0][1]])
+      stateBoard[this.cords[0][0]][this.cords[0][1]] = '0';
     } 
     // down
     else if (this.dir == "down"){
@@ -96,6 +93,7 @@ let bot2 = game.createSnake("bot")
 game.addSnake(bot2)
 // let bot3 = game.createSnake("bot")
 // game.addSnake(bot3)
+bot2.move("up")
 bot2.move("up")
 // bot2.move("up")
 module.exports = Game;
