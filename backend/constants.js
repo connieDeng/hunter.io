@@ -22,6 +22,27 @@ const down = [40];
 const left = [37];
 const right = [39];
 
+const newSpawn=(player)=>
+{
+  
+  var newCord=[Math.floor((CANVAS_SIZE[0]/SCALE)*Math.random()),Math.floor((CANVAS_SIZE[1]/SCALE)*Math.random())];
+  for(var i = 0;i<player.size;i++)
+  {
+    if(newCord[0]===player[i][0])
+    {
+      newCord[0]=Math.floor((CANVAS_SIZE[0]/SCALE)*Math.random);
+      i=0;
+    }
+    if(newCord[0]===player[i][1])
+    {
+      newCord[1]=Math.floor((CANVAS_SIZE[1]/SCALE)*Math.random);
+      i=0;
+    }
+  }
+  return newCord;
+
+}
+
 module.exports = {
   CANVAS_SIZE,
   SNAKE_START,
