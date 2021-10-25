@@ -28,7 +28,7 @@ class Game {
       let start_cords = Utility.getEmptyCoords(stateBoard);
       start_cords.forEach(element => snake.cords.push(element));
       start_cords.forEach(element => {
-        console.log(element[0], element[1])
+        // console.log(element[0], element[1])
         stateBoard[element[0]][element[1]] = id;
       });
       console.log("snake " + snake.id + " coordinates are: " + snake.cords);
@@ -43,57 +43,66 @@ class Snake extends Game {
       this.speed = 1;
       this.cords = [];
       this.dir = 'up';
-
   }
 
-  set set_direction(newDir) {
-      this.direction = newDir
+  set_direction(newDir) {
+    this.dir = newDir
+    console.log(this.dir)
   }
 
   move() {
-    console.log("in move, previous cords", this.cords)
+    console.log("currently direction:", this.dir, "; in move, previous cords: ", this.cords)
+    // console.table(stateBoard)
     // up
+    let newCords = [0,0]
     if (this.dir == "up"){
       let move_cord = this.cords.pop()
       stateBoard[move_cord[0]][move_cord[1]] = -1;
-      console.log(this.cords[0][0]-1, this.cords[0][1])
-      this.cords.unshift([this.cords[0][0]-1, this.cords[0][1]])
-      stateBoard[this.cords[0][0]][this.cords[0][1]] = '0';
+      //[0][0] is the front of the snake; -1 front of it
+      newCords = [this.cords[0][0]-1, this.cords[0][1]]
+      this.cords.unshift([newCords[0], newCords[1]])
+      console.log(this.cords)
+      console.log("moved up")
     } 
     // down
     else if (this.dir == "down"){
-      this.cords.forEach(element => {
-        console.log(element)
-      });
+      let move_cord = this.cords.shift();
+      stateBoard[move_cord[0]][move_cord[1]] = -1;
+      newCords = [this.cords[0][0]+1, this.cords[0][1]]
+      this.cords.push([newCords[0], newCords[1]])
+      console.log("moved down")
+      console.log(this.cords)
     } 
     // left
     else if (this.dir == "left"){
-      this.cords.forEach(element => {
-        console.log(element)
-      });
+      let move_cord = this.cords.pop()
+      stateBoard[move_cord[0]][move_cord[1]-1] = -1;
+      newCords = [this.cords[0][0], this.cords[0][1]-1]
+      this.cords.unshift([newCords[0], newCords[1]])
+      console.log("moved left")
+      console.log(this.cords)
     } 
     // right
     else {
-      this.cords.forEach(element => {
-        console.log(element)
-      });
+      let move_cord = this.cords.pop()
+      stateBoard[move_cord[0]][move_cord[1]+1] = -1;
+      newCords = [this.cords[0][0], this.cords[0][1]+1]
+      this.cords.unshift([newCords[0], newCords[1]])
+      console.log("moved right")
+      console.log(this.cords)
     }
-    console.log(this.cords)
-
-    console.log("updated state board")
+    stateBoard[newCords[0]][newCords[1]] = this.id;
     console.table(stateBoard)
   }
   
 }
 
 game = new Game()
-// let bot1 = game.createSnake("bot")
-// game.addSnake(bot1)
-let bot2 = game.createSnake("bot")
-game.addSnake(bot2)
-// let bot3 = game.createSnake("bot")
-// game.addSnake(bot3)
-bot2.move("up")
-bot2.move("up")
+let bot1 = game.createSnake("bot")
+game.addSnake(bot1)
+// bot1.move()
+bot1.set_direction("down")
+bot1.move()
+// bot1.move()
 // bot2.move("up")
 module.exports = Game;
