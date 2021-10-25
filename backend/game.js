@@ -4,7 +4,8 @@ let stateBoard = Utility.createStateBoard(20,20)
 
 class Game {
     constructor() {
-      this.players = new Array(10).fill(0)
+      this.players = Utility.createDict(10)
+      this.apples = Utility.createDict(10)
     }
     
     createSnake(type){
@@ -26,12 +27,20 @@ class Game {
       this.players[id] = snake;
 
       let start_cords = Utility.getEmptyCoords(stateBoard);
-      start_cords.forEach(element => snake.cords.push(element));
-      start_cords.forEach(element => {
-        // console.log(element[0], element[1])
+      snake.cords.push(start_cords)
+      // we are assuming each snake is 2 pixels (head and body)
+      snake.cords.push([start_cords[0]+1, start_cords[1]])
+      snake.cords.forEach(element => {
         stateBoard[element[0]][element[1]] = id;
       });
       console.log("snake " + snake.id + " coordinates are: " + snake.cords);
+    }
+
+    addApple(){
+      let apple_cords = Utility.getEmptyCoords(stateBoard);
+      console.log(apple_cords)
+      stateBoard[apple_cords[0]][apple_cords[1]] = 'A';
+      console.table(stateBoard)
     }
 }
 
@@ -97,12 +106,12 @@ class Snake extends Game {
   
 }
 
+// driver code here
 game = new Game()
-let bot1 = game.createSnake("bot")
-game.addSnake(bot1)
+// let bot1 = game.createSnake("bot")
+// game.addSnake(bot1)
 // bot1.move()
-bot1.set_direction("down")
-bot1.move()
+// bot1.set_direction("down")
 // bot1.move()
-// bot2.move("up")
+// game.addApple()
 module.exports = Game;

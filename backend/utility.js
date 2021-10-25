@@ -1,9 +1,18 @@
 // given array, find first empty index
-const getRandomId = function (AllSnakes) {
-    for(let i = 0; i < AllSnakes.length; i ++){
-        if (AllSnakes[i] == 0)
-            return i
+const getRandomId = function (dict) {
+    for (const [key, value] of Object.entries(dict)) {
+        if (value === null){
+            return key;
+        }
     }
+}
+
+const createDict = function(num) {
+    let dict = {};
+    for (let i = 0; i < num; i++) {        
+        dict[i] = null
+    }
+    return dict
 }
 
 const getEmptyCoords = function (stateBoard) {
@@ -16,7 +25,7 @@ const getEmptyCoords = function (stateBoard) {
         temp_y = Math.floor(Math.random() * 20);
     } 
     
-    return [[temp_x, temp_y], [temp_x+1, temp_y]]
+    return [temp_x, temp_y]
 }
 
 const createStateBoard = function (rows, cols) {
@@ -27,4 +36,4 @@ const createStateBoard = function (rows, cols) {
     return stateBoard
 }
 
-module.exports = {getRandomId, getEmptyCoords, createStateBoard}
+module.exports = {getRandomId, getEmptyCoords, createStateBoard, createDict}
