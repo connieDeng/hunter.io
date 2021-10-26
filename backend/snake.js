@@ -36,10 +36,6 @@ class Bot_snake extends Snake {
     super(ID);
     this.test = TEST
   }
-
-  show() {
-    console.log(this.id + ' following message: ' + this.test) ;
-  }
 }
 
 bot1 = new Bot_snake(1, 'test');

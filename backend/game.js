@@ -1,32 +1,35 @@
 const Utility = require("./utility")
 
 let stateBoard = Utility.createStateBoard(20,20)
+let players = Utility.createDict(10);
+let numApples = 0;
+let numPlayers = 0;
 
 class Game {
     constructor() {
-      this.players = Utility.createDict(10);
-      // do we need this? I think we only need to handle how many apples on the board
-      // this.apples = Utility.createDict(10)
-      this.numApples = 0;
+      console.log("Made a game")
     }
     
-    createSnake(type){
-      let id = Utility.getRandomId(this.players)
-      let snake = null
-      if(type === "bot"){
-        console.log("Creating Bot Snake with ID: " + id)
-        snake = new Snake(id, 'bot Snake');
-      } else {
-        console.log("Creating User Snake with ID: " + id)
-        snake = new Snake(id, 'user Snake');
-      }
+    createSnake(SOCKET_ID){
+      let id = Utility.getRandomId(players);
+      let socket_id = SOCKET_ID;
+      // let snake = null
+      // if(type === "bot"){
+      //   // console.log("Creating Bot Snake with ID: " + id)
+      //   snake = new Snake(id, socket_id);
+      // } else {
+      //   console.log("Creating User Snake with ID: " + id)
+      //   snake = new Snake(id, socket_id);
+      // }
+
+      let snake = new Snake(id, socket_id);
       return snake
     }
 
     addSnake(snake){
       console.log("adding snake with id " + snake.id)
       let id = snake.id;
-      this.players[id] = snake;
+      players[id] = snake;
 
       let start_cords = Utility.getEmptyCoords(stateBoard);
       snake.cords.push(start_cords)
@@ -35,13 +38,12 @@ class Game {
       snake.cords.forEach(element => {
         stateBoard[element[0]][element[1]] = id;
       });
-      console.log("snake " + snake.id + " coordinates are: " + snake.cords);
     }
 
     addApple(){
       let apple_cords = Utility.getEmptyCoords(stateBoard);
       stateBoard[apple_cords[0]][apple_cords[1]] = 'A';
-      this.numApples += 1
+      numApples += 1
     }
 
  
@@ -49,13 +51,13 @@ class Game {
 
 // GENERAL SNAKE
 class Snake extends Game {
-  constructor(ID) {
-      super(ID);
-      this.id = ID ;
+  constructor(ID, SOCKET_ID) {
+      super(ID, SOCKET_ID);
+      this.id = ID;
+      this.socket_id = SOCKET_ID;
       this.speed = 1;
       this.cords = [];
       this.score = 0;
-
       // default moving up
       //vertical
       this.dx = -1;
@@ -65,7 +67,7 @@ class Snake extends Game {
 
   set_direction(newDir) {
     this.dir = newDir
-    console.log(this.dir)
+    // console.log(this.dir)
   }
 
   change_direction(event) {  
@@ -75,7 +77,7 @@ class Snake extends Game {
     const goingRight = this.dy === 1;  
     const goingLeft = this.dy=== -1;
 
-    console.log(keyPressed)
+    // console.log(keyPressed)
     if (keyPressed === "left" && !goingRight){    
       this.dx = 0;
       this.dy = -1;  
@@ -124,50 +126,55 @@ class Snake extends Game {
       stateBoard[old[0]][old[1]] = -1;
     }
     stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
-    console.log(this.score)
-    console.table(stateBoard)
+    // console.log(this.score)
+    // console.table(stateBoard)
   }
 }
 
 // driver code here
-const readline = require('readline');
-readline.emitKeypressEvents(process.stdin);
-process.stdin.setRawMode(true);
+// const readline = require('readline');
+// readline.emitKeypressEvents(process.stdin);
+// process.stdin.setRawMode(true);
 
 
-function main (){
-  // create new game
-  game = new Game()
+// function main (){
+//   // create new game
+//   game = new Game()
 
-  // create and include one snake
-  let bot1 = game.createSnake("bot")
-  game.addSnake(bot1)
+//   // create and include one snake
+//   let bot1 = game.createSnake("bot")
+//   game.addSnake(bot1)
+
+//   // let bot2 = game.createSnake("bot")
+//   // game.addSnake(bot2)
   
-  // generate food
-  game.addApple()
+//   // generate food
+//   game.addApple()
   
-  start_game();
+//   start_game();
   
-  process.stdin.on('keypress', (str, key) => {
-    if (key.ctrl && key.name === 'c') {
-      process.exit();
-    } else {
-      console.log("You pressed the", key.name, "key");
-      bot1.change_direction(key.name)
-    }
-  });
+//   process.stdin.on('keypress', (str, key) => {
+//     if (key.ctrl && key.name === 'c') {
+//       process.exit();
+//     } else {
+//       console.log("You pressed the", key.name, "key");
+//       bot1.change_direction(key.name)
+//       // bot2.change_direction(key.name)
+//     }
+//   });
 
-  function start_game() {
-    timeout = setTimeout(function onTick() {
-      console.clear();
-      bot1.move();
-      start_game();
-    }, 300)
-  }
-}
+//   function start_game() {
+//     timeout = setTimeout(function onTick() {
+//       console.clear();
+//       bot1.move();
+//       // bot2.move();
+//       start_game();
+//     }, 300)
+//   }
+// }
 
 
-main();
+// main();
 
 // console.table(stateBoard)
-module.exports = Game;
+module.exports = { Game, Snake, stateBoard, numApples, numPlayers, players};
