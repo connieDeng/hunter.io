@@ -4,8 +4,11 @@ let stateBoard = Utility.createStateBoard(20,20)
 
 class Game {
     constructor() {
-      this.players = Utility.createDict(10)
-      this.apples = Utility.createDict(10)
+      this.players = Utility.createDict(10);
+      // do we need this? I think we only need to handle how many apples on the board
+      // this.apples = Utility.createDict(10)
+      this.numApples = 0;
+      this.gameStart = false;
     }
     
     createSnake(type){
@@ -38,10 +41,11 @@ class Game {
 
     addApple(){
       let apple_cords = Utility.getEmptyCoords(stateBoard);
-      console.log(apple_cords)
       stateBoard[apple_cords[0]][apple_cords[1]] = 'A';
-      console.table(stateBoard)
+      this.numApples += 1
     }
+
+ 
 }
 
 // GENERAL SNAKE
@@ -51,7 +55,12 @@ class Snake extends Game {
       this.id = ID ;
       this.speed = 1;
       this.cords = [];
-      this.dir = 'up';
+
+      // default moving up
+      //vertical
+      this.dx = -1;
+      //horizontal
+      this.dy = 0;
   }
 
   set_direction(newDir) {
@@ -59,59 +68,99 @@ class Snake extends Game {
     console.log(this.dir)
   }
 
-  move() {
-    console.log("currently direction:", this.dir, "; in move, previous cords: ", this.cords)
-    // console.table(stateBoard)
-    // up
-    let newCords = [0,0]
-    if (this.dir == "up"){
-      let move_cord = this.cords.pop()
-      stateBoard[move_cord[0]][move_cord[1]] = -1;
-      //[0][0] is the front of the snake; -1 front of it
-      newCords = [this.cords[0][0]-1, this.cords[0][1]]
-      this.cords.unshift([newCords[0], newCords[1]])
-      console.log(this.cords)
-      console.log("moved up")
-    } 
-    // down
-    else if (this.dir == "down"){
-      let move_cord = this.cords.shift();
-      stateBoard[move_cord[0]][move_cord[1]] = -1;
-      newCords = [this.cords[0][0]+1, this.cords[0][1]]
-      this.cords.push([newCords[0], newCords[1]])
-      console.log("moved down")
-      console.log(this.cords)
-    } 
-    // left
-    else if (this.dir == "left"){
-      let move_cord = this.cords.pop()
-      stateBoard[move_cord[0]][move_cord[1]-1] = -1;
-      newCords = [this.cords[0][0], this.cords[0][1]-1]
-      this.cords.unshift([newCords[0], newCords[1]])
-      console.log("moved left")
-      console.log(this.cords)
-    } 
-    // right
-    else {
-      let move_cord = this.cords.pop()
-      stateBoard[move_cord[0]][move_cord[1]+1] = -1;
-      newCords = [this.cords[0][0], this.cords[0][1]+1]
-      this.cords.unshift([newCords[0], newCords[1]])
-      console.log("moved right")
-      console.log(this.cords)
+  change_direction(event) {  
+    console.log('DX IS: ', this.dx, 'DY IS: ', this.dy)
+    const keyPressed = event;
+    const goingUp = this.dx === -1;
+    const goingDown = this.dx === 1;
+    const goingRight = this.dy === 1;  
+    const goingLeft = this.dy=== -1;
+
+    console.log(keyPressed)
+    if (keyPressed === "left" && !goingRight){    
+      this.dx = 0;
+      this.dy = -1;  
     }
-    stateBoard[newCords[0]][newCords[1]] = this.id;
-    console.table(stateBoard)
+
+    if (keyPressed === "up" && !goingDown){    
+      this.dx = -1;
+      this.dy = 0;
+    }
+
+    if (keyPressed === "right" && !goingLeft){    
+      this.dx = 0;
+      this.dy = 1;
+    }
+
+    if (keyPressed === "down" && !goingUp){    
+      this.dx = 1;
+      this.dy = 0;
+    }
   }
-  
+
+  ifCollision(head_cord){
+    let y = head_cord[0];
+    let x = head_cord[1]
+    if (x <= 0 || y <= 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1){
+      return true
+    } else {
+      return false
+    }
+    
+  }
+
+  // moves are: up,down,left,right && turnUp,turnDown,turnLeft,turnRight
+  move() {
+
+    let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
+    if(this.ifCollision(head) === true){
+      this.dx = 0;
+      this.dy = 0;
+      // delete the snake
+      process.exit()
+    } else {
+      this.cords.unshift(head);
+      stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
+      let old = this.cords.pop();
+      stateBoard[old[0]][old[1]] = -1;
+      console.table(stateBoard)
+    }
+  }
 }
 
 // driver code here
-game = new Game()
-// let bot1 = game.createSnake("bot")
-// game.addSnake(bot1)
-// bot1.move()
-// bot1.set_direction("down")
-// bot1.move()
-// game.addApple()
+const readline = require('readline');
+readline.emitKeypressEvents(process.stdin);
+process.stdin.setRawMode(true);
+
+
+function main (){
+  game = new Game()
+  let bot1 = game.createSnake("bot")
+  game.addSnake(bot1)
+
+  start_game();
+  
+  process.stdin.on('keypress', (str, key) => {
+    if (key.ctrl && key.name === 'c') {
+      process.exit();
+    } else {
+      console.log("You pressed the", key.name, "key");
+      bot1.change_direction(key.name)
+    }
+  });
+
+  function start_game() {
+    timeout = setTimeout(function onTick() {
+      // console.clear();
+      bot1.move();
+      start_game();
+    }, 500)
+  }
+}
+
+
+main();
+
+// console.table(stateBoard)
 module.exports = Game;

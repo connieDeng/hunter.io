@@ -12,6 +12,16 @@ const User = require("./user");
 const Snake = require("./snake")
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
 
-console.log('here')
-bot1 = new Snake.bot_snake("LMNAO");
-bot1.show()
+const readline = require('readline');
+readline.emitKeypressEvents(process.stdin);
+process.stdin.setRawMode(true);
+
+process.stdin.on('keypress', (str, key) => {
+  if (key.ctrl && key.name === 'c') {
+    process.exit();
+  } else {
+    console.log("You pressed the", key.name, "key");
+    // console.log(key);
+  }
+});
+console.log('Press any key...');console.log('here')
