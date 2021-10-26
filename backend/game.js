@@ -8,7 +8,6 @@ class Game {
       // do we need this? I think we only need to handle how many apples on the board
       // this.apples = Utility.createDict(10)
       this.numApples = 0;
-      this.gameStart = false;
     }
     
     createSnake(type){
@@ -70,7 +69,6 @@ class Snake extends Game {
   }
 
   change_direction(event) {  
-    console.log('DX IS: ', this.dx, 'DY IS: ', this.dy)
     const keyPressed = event;
     const goingUp = this.dx === -1;
     const goingDown = this.dx === 1;
@@ -100,38 +98,34 @@ class Snake extends Game {
   }
 
   ifCollision(head_cord){
+    // console.log([head_cord, stateBoard[head_cord[0]][head_cord[1]], stateBoard[head_cord[0]][head_cord[1]]=== 'A']);
+    let x = head_cord[1];
     let y = head_cord[0];
-    let x = head_cord[1]
-   
-    if (x <= 0 || y <= 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1){
-      return true
-    } else if (stateBoard[x][y] === 'A'){
+    // if out of bounds
+    if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1) {
+      process.exit();
+    } else if (stateBoard[head_cord[0]][head_cord[1]]=== 'A'){
       return 'apple'
-    } else {
-      return 'collided with another snake'
-    }
+    } 
     
   }
 
   // moves are: up,down,left,right && turnUp,turnDown,turnLeft,turnRight
   move() {
     let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
-    if(this.ifCollision(head) === true){
-      this.dx = 0;
-      this.dy = 0;
-      // delete the snake
-      process.exit()
+    this.cords.unshift(head);
+    if(this.ifCollision(head) === 'apple'){
+      this.score += 10;
+      let old = this.cords[this.cords.length-1];
+      stateBoard[old[0]][old[1]] = this.id;
+      game.addApple();
     } else {
-      if(this.ifCollision(head) === 'apple'){
-        this.score += 10;
-      }
-      this.cords.unshift(head);
-      stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
       let old = this.cords.pop();
       stateBoard[old[0]][old[1]] = -1;
-      console.log(this.score)
-      console.table(stateBoard)
     }
+    stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
+    console.log(this.score)
+    console.table(stateBoard)
   }
 }
 
@@ -142,9 +136,14 @@ process.stdin.setRawMode(true);
 
 
 function main (){
+  // create new game
   game = new Game()
+
+  // create and include one snake
   let bot1 = game.createSnake("bot")
   game.addSnake(bot1)
+  
+  // generate food
   game.addApple()
   
   start_game();
@@ -163,7 +162,7 @@ function main (){
       console.clear();
       bot1.move();
       start_game();
-    }, 500)
+    }, 300)
   }
 }
 
