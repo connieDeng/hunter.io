@@ -1,7 +1,8 @@
 const Utility = require("./utility")
 
 let stateBoard = Utility.createStateBoard(20,20)
-let players = Utility.createDict(10);
+let playerIDs = Utility.createDict(10);
+let players = {}
 let numApples = 0;
 let numPlayers = 0;
 
@@ -11,27 +12,18 @@ class Game {
     }
     
     createSnake(SOCKET_ID){
-      let id = Utility.getRandomId(players);
-      let socket_id = SOCKET_ID;
-      // let snake = null
-      // if(type === "bot"){
-      //   // console.log("Creating Bot Snake with ID: " + id)
-      //   snake = new Snake(id, socket_id);
-      // } else {
-      //   console.log("Creating User Snake with ID: " + id)
-      //   snake = new Snake(id, socket_id);
-      // }
-
-      let snake = new Snake(id, socket_id);
+      let id = Utility.getRandomId(playerIDs);
+      let snake = new Snake(id, SOCKET_ID);
       return snake
     }
 
     addSnake(snake){
       console.log("adding snake with id " + snake.id)
       let id = snake.id;
-      players[id] = snake;
+      playerIDs[id] = snake;
+      players[snake.socket_id] = snake;
 
-      let start_cords = Utility.getEmptyCoords(stateBoard);
+      let start_cords = Utility.getEmptyCoordsforSnake(stateBoard);
       snake.cords.push(start_cords)
       // we are assuming each snake is 2 pixels (head and body)
       snake.cords.push([start_cords[0]+1, start_cords[1]])
@@ -41,12 +33,11 @@ class Game {
     }
 
     addApple(){
-      let apple_cords = Utility.getEmptyCoords(stateBoard);
+      let apple_cords = Utility.getEmptyCoordsforApple(stateBoard);
       stateBoard[apple_cords[0]][apple_cords[1]] = 'A';
       numApples += 1
     }
 
- 
 }
 
 // GENERAL SNAKE
@@ -107,7 +98,7 @@ class Snake extends Game {
     if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1) {
       process.exit();
     } else if (stateBoard[head_cord[0]][head_cord[1]]=== 'A'){
-      return 'apple'
+      return 'apple';
     } 
     
   }
@@ -126,8 +117,15 @@ class Snake extends Game {
       stateBoard[old[0]][old[1]] = -1;
     }
     stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
-    // console.log(this.score)
-    // console.table(stateBoard)
+  }
+
+  destroy(){
+    this.cords.forEach(element => {
+      stateBoard[element[0]][element[1]] = -1
+    });
+
+    playerIDs[this.id] = null;
+    delete players[this.socket_id];
   }
 }
 
@@ -177,4 +175,4 @@ class Snake extends Game {
 // main();
 
 // console.table(stateBoard)
-module.exports = { Game, Snake, stateBoard, numApples, numPlayers, players};
+module.exports = { Game, Snake, stateBoard, numApples, numPlayers, players, playerIDs};

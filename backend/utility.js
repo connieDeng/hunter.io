@@ -15,7 +15,7 @@ const createDict = function(num) {
     return dict
 }
 
-const getEmptyCoords = function (stateBoard) {
+const getEmptyCoordsforApple = function (stateBoard) {
     // console.log(stateBoard)
     temp_x = Math.floor(Math.random() * stateBoard.length);
     temp_y = Math.floor(Math.random() * stateBoard[0].length);
@@ -28,6 +28,20 @@ const getEmptyCoords = function (stateBoard) {
     return [temp_x, temp_y]
 }
 
+const getEmptyCoordsforSnake = function (stateBoard) {
+    temp_x = Math.floor(Math.random() * stateBoard.length-5) + 5;
+    temp_y = Math.floor(Math.random() * stateBoard.length-5) + 5
+    console.log(temp_x, temp_y)
+
+    while (stateBoard[temp_x][temp_y] !== -1 && stateBoard[temp_x+1][temp_y] !== -1){
+        Math.floor(Math.random() * stateBoard.length-5) + 5;
+        Math.floor(Math.random() * stateBoard.length-5) + 5;
+    } 
+    console.log(temp_x, temp_y)
+    
+    return [temp_x, temp_y]
+}
+
 const createStateBoard = function (rows, cols) {
     var stateBoard = [];
     for(var i=0; i<rows; i++) {
@@ -36,4 +50,8 @@ const createStateBoard = function (rows, cols) {
     return stateBoard
 }
 
-module.exports = {getRandomId, getEmptyCoords, createStateBoard, createDict}
+const returnSnake = function (socket_id, playerDict){
+    return playerDict[socket_id]
+}
+
+module.exports = {getRandomId, createStateBoard, createDict, returnSnake, getEmptyCoordsforApple, getEmptyCoordsforSnake}
