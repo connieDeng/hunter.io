@@ -55,6 +55,7 @@ class Snake extends Game {
       this.id = ID ;
       this.speed = 1;
       this.cords = [];
+      this.score = 0;
 
       // default moving up
       //vertical
@@ -101,17 +102,19 @@ class Snake extends Game {
   ifCollision(head_cord){
     let y = head_cord[0];
     let x = head_cord[1]
+   
     if (x <= 0 || y <= 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1){
       return true
+    } else if (stateBoard[x][y] === 'A'){
+      return 'apple'
     } else {
-      return false
+      return 'collided with another snake'
     }
     
   }
 
   // moves are: up,down,left,right && turnUp,turnDown,turnLeft,turnRight
   move() {
-
     let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
     if(this.ifCollision(head) === true){
       this.dx = 0;
@@ -119,10 +122,14 @@ class Snake extends Game {
       // delete the snake
       process.exit()
     } else {
+      if(this.ifCollision(head) === 'apple'){
+        this.score += 10;
+      }
       this.cords.unshift(head);
       stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
       let old = this.cords.pop();
       stateBoard[old[0]][old[1]] = -1;
+      console.log(this.score)
       console.table(stateBoard)
     }
   }
@@ -138,7 +145,8 @@ function main (){
   game = new Game()
   let bot1 = game.createSnake("bot")
   game.addSnake(bot1)
-
+  game.addApple()
+  
   start_game();
   
   process.stdin.on('keypress', (str, key) => {
@@ -152,7 +160,7 @@ function main (){
 
   function start_game() {
     timeout = setTimeout(function onTick() {
-      // console.clear();
+      console.clear();
       bot1.move();
       start_game();
     }, 500)
