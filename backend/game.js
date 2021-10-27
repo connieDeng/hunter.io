@@ -32,10 +32,14 @@ class Game {
       });
     }
 
-    addApple(){
+    addApple(socket){
       let apple_cords = Utility.getEmptyCoordsforApple(stateBoard);
+      console.log("apple coords", apple_cords)
       stateBoard[apple_cords[0]][apple_cords[1]] = 'A';
       numApples += 1
+
+      socket.emit("updatedStateBoard", stateBoard);
+      socket.broadcast.emit("updatedStateBoard", stateBoard)
     }
 
 }
@@ -94,9 +98,10 @@ class Snake extends Game {
     // console.log([head_cord, stateBoard[head_cord[0]][head_cord[1]], stateBoard[head_cord[0]][head_cord[1]]=== 'A']);
     let x = head_cord[1];
     let y = head_cord[0];
+    // console.log(x,y)
     // if out of bounds
     if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1) {
-      process.exit();
+      return -1;
     } else if (stateBoard[head_cord[0]][head_cord[1]]=== 'A'){
       return 'apple';
     } 
@@ -122,21 +127,22 @@ class Snake extends Game {
   }
   */
 
-  move() {
+  move(GAME, socket) {
+    // console.log('test', socket)
     let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
     this.cords.unshift(head);
     if(this.ifCollision(head) === 'apple'){
+      GAME.addApple(socket);
       this.score += 10;
       let old = this.cords[this.cords.length-1];
       stateBoard[old[0]][old[1]] = this.id;
-      game.addApple();
+      // socket.emit("addApple");
     } else {
       let old = this.cords.pop();
       stateBoard[old[0]][old[1]] = -1;
     }
     stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
   }
-
 
   destroy(){
     this.cords.forEach(element => {

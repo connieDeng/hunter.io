@@ -16,13 +16,13 @@ const createDict = function(num) {
 }
 
 const getEmptyCoordsforApple = function (stateBoard) {
-    // console.log(stateBoard)
+    console.table(stateBoard)
     temp_x = Math.floor(Math.random() * stateBoard.length);
     temp_y = Math.floor(Math.random() * stateBoard[0].length);
-    
-    while (stateBoard[temp_x][temp_y] !== -1 && stateBoard[temp_x+1][temp_y] !== -1){
-        temp_x = Math.floor(Math.random() * 20);
-        temp_y = Math.floor(Math.random() * 20);
+    console.log("GENERATED COORDS", temp_x, temp_y)
+    while (stateBoard[temp_x][temp_y] !== -1){
+        temp_x = Math.floor(Math.random() * stateBoard.length);
+        temp_y = Math.floor(Math.random() * stateBoard.length[0]);
     } 
     
     return [temp_x, temp_y]
@@ -36,7 +36,7 @@ const getEmptyCoordsforSnake = function (stateBoard) {
         Math.floor(Math.random() * stateBoard.length-5) + 5;
         Math.floor(Math.random() * stateBoard.length-5) + 5;
     } 
-    
+
     return [temp_x, temp_y]
 }
 

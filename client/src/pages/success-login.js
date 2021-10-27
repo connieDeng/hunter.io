@@ -12,7 +12,6 @@ export const SuccessLogin = (props) => {
         socket.on("initializedPlayer", (board) => {
             setBoard(board);
         }); 
-        // socket.emit("moveSnake", socket.id);
     };
     
     socket.on("playerMoved", (board) => { 
@@ -27,29 +26,60 @@ export const SuccessLogin = (props) => {
         socket.emit("moveSnake");
     };
     
+    const keyHandler = (event) => {
+        // changing the state to the name of the key
+      // which is pressed
+    //   setKey(event.keyCode);
+      if (event.keyCode === 37){
+        socket.emit("moveSnake", "left");
+      } else if (event.keyCode === 38) {
+        socket.emit("moveSnake", "up");
+      } else if (event.keyCode === 39){
+        socket.emit("moveSnake", "right");
+      } else if (event.keyCode === 40){
+        socket.emit("moveSnake", "down");
+      }
+    };
+    
     return(
-        <div className='container'>
+        <section className='container' onKeyDown={(e) => keyHandler(e)} style={{backgroundColor:"lightBlue", position:"absolute"}} tabIndex="0">
             <div> {"honestly please why"} </div>
             
             <div> 
             { board !== null ? 
-                <div>
+                <table>
                     {board.map((row, i) => (
-                        <div key={i}>
+                        <tr key={i}>
                         {row.map((col, j) => (
-                            <span key={j}>{col}</span>
+                            // <span>{col}</span>
+                            <td>
+                                { col === -1
+                                    ? <td>{'●'}</td>
+                                    : ( col === 'A'
+                                        ? <td>{'A'}</td>
+                                        : <td>{col}</td>
+                                    )
+                                }
+                                {/* <span>
+                                {col === -1
+                                    ? <span style={{padding:'5px'}}>{' '}</span>
+                                    : <span>{'U'}</span>
+                                }
+                                </span> */}
+                            </td>
                         ))}
-                        </div>
+                        </tr>
                     ))} 
-                </div> :
+                </table> :
                 <div> NO BOARD </div>
             }
             </div>
-            
-            <button onClick={}>CHANGE DIR</button>
+
+            {/* <button onClick={}>CHANGE DIR</button> */}
             <button onClick={moveSnake}>MOVE</button>
             <button onClick={startGame}>Start Game</button>
-        </div>
+            {/* <input type="text" onKeyPress={(e) => handler(e)} /> */}
+        </section>
     );
     
 }
