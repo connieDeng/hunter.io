@@ -1,36 +1,15 @@
-const insertSort = (ans, num) => {
-    if (ans.length <= 0 || num <= ans[(ans.length)-1]){
-        ans.push(num)
-        return ans
-    } else if(num >= ans[0]){
-        ans.unshift(num)
-        return ans
-    } else {
-        let pos = -1;
-        for (let i = 1; i < ans.length; i++) {
-            if(ans[i-1] >= num && ans[i] < num){
-                pos = i
-            }
-        }
-        ans.splice(pos, 0, num);
-        return ans
-
-    }
-}
-
-const sortStream = (arr, N) => {
-    let ans = []
-    for (let i = 0; i < N; i++) {
-        insertSort(ans, arr[i])
+const sortOnKeys = (dict) => {
+    var items = Object.keys(dict).map(function(key) {
+        return [key, dict[key]];
+    });
     
-        for (let i = 0; i < ans.length; i++) {
-            console.log(ans[i]);
-        }
-        console.log('\n')
-    }
+    // Sort the array based on the second element
+    items.sort(function(first, second) {
+    return second[1] - first[1];
+    });     
+
+    return items
 }
 
-let arr = [4, 1, 7, 6, 2, 2, 6, 1, 10, 7, 7, 7, 0 ];
-let N = arr.length;
-
-sortStream(arr, N);
+let arr = { 0: 1, 1: 10, 2: 2};
+console.log(sortOnKeys(arr));

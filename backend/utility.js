@@ -40,7 +40,7 @@ const getEmptyCoordsforSnake = function (stateBoard) {
         temp_x = Math.floor(Math.random() * (max_x - min_x) + min_x);
         temp_y = Math.floor(Math.random() * stateBoard.length-2);
     } 
-    
+
     return [temp_x, temp_y]
 }
 
@@ -56,4 +56,17 @@ const returnSnake = function (socket_id, playerDict){
     return playerDict[socket_id]
 }
 
-module.exports = {getRandomId, createStateBoard, createDict, returnSnake, getEmptyCoordsforApple, getEmptyCoordsforSnake}
+const sortOnVals = (dict) => {
+    var items = Object.keys(dict).map(function(key) {
+        return [key, dict[key], dict[key].score];
+    });
+    
+    // Sort the array based on the second element
+    items.sort(function(first, second) {
+    return second[2] - first[2];
+    });     
+
+    return items;
+}
+
+module.exports = {getRandomId, createStateBoard, createDict, returnSnake, getEmptyCoordsforApple, getEmptyCoordsforSnake, sortOnVals}

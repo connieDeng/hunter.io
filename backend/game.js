@@ -1,8 +1,8 @@
 const Utility = require("./utility")
 
-let stateBoard = Utility.createStateBoard(20,20)
+let stateBoard = Utility.createStateBoard(20,20);
 let playerIDs = Utility.createDict(10);
-let players = {}
+let players = {};
 let numApples = 0;
 let numPlayers = 0;
 
@@ -111,22 +111,22 @@ class Snake extends Game {
   }
 
   /*
-  MOVING FORWARD
-  // moves are: up,down,left,right && turnUp,turnDown,turnLeft,turnRight
-  move() {
-    let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
-    this.cords.unshift(head);
-    if(this.ifCollision(head) === 'apple'){
-      this.score += 10;
-      let old = this.cords[this.cords.length-1];
-      stateBoard[old[0]][old[1]] = this.id;
-      game.addApple();
-    } else {
-      let old = this.cords.pop();
-      stateBoard[old[0]][old[1]] = -1;
+    MOVING FORWARD
+    // moves are: up,down,left,right && turnUp,turnDown,turnLeft,turnRight
+    move() {
+      let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
+      this.cords.unshift(head);
+      if(this.ifCollision(head) === 'apple'){
+        this.score += 10;
+        let old = this.cords[this.cords.length-1];
+        stateBoard[old[0]][old[1]] = this.id;
+        game.addApple();
+      } else {
+        let old = this.cords.pop();
+        stateBoard[old[0]][old[1]] = -1;
+      }
+      stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
     }
-    stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
-  }
   */
 
   move(GAME, socket) {
@@ -136,6 +136,12 @@ class Snake extends Game {
     if(this.ifCollision(head) === 'apple'){
       GAME.addApple(socket);
       this.score += 10;
+      players[socket.id].score = this.score;
+      
+      // console.table(Utility.sortOnVals(players))
+      socket.emit("updatePlayers", Utility.sortOnVals(players));
+      socket.broadcast.emit("updatePlayers", Utility.sortOnVals(players))
+
       let old = this.cords[this.cords.length-1];
       stateBoard[old[0]][old[1]] = this.id;
       // socket.emit("addApple");

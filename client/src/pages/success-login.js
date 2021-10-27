@@ -5,7 +5,7 @@ import socket from "../socket";
 
 export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
-
+    const [players, setPlayers] = useState({})
     const startGame = () => { 
         socket.emit("initPlayer");
         
@@ -20,6 +20,11 @@ export const SuccessLogin = (props) => {
 
     socket.on("updatedStateBoard", (board) => { 
         setBoard(board);
+    });
+
+    socket.on("updatePlayers", (players) => { 
+        setPlayers(players);
+        console.log(players)
     });
 
     const moveSnake = () => {
@@ -74,11 +79,24 @@ export const SuccessLogin = (props) => {
                 <div> NO BOARD </div>
             }
             </div>
-
+      
             {/* <button onClick={}>CHANGE DIR</button> */}
             <button onClick={moveSnake}>MOVE</button>
             <button onClick={startGame}>Start Game</button>
             {/* <input type="text" onKeyPress={(e) => handler(e)} /> */}
+
+
+            <div>Leader Board</div>
+            <table>
+            {
+                Object.entries(players)
+                .map(([key, value]) => 
+                    <tr>
+                        {`Snake ${value[1].id} has ${value[2]} points \n`}
+                    </tr>
+                )
+            }
+            </table>
         </section>
     );
     
