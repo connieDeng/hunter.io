@@ -33,14 +33,19 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     GAME.addSnake(SNAKE);
     Game.numPlayers += 1;
     // console.log(SNAKE);
-    console.table(Game.stateBoard);
     socket.emit("initializedPlayer", Game.stateBoard);
     socket.broadcast.emit("initializedPlayer", Game.stateBoard);
 
+    GAME.addApple()
+    socket.emit("updatedStateBoard", Game.stateBoard);
+    socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
+
+    console.table(Game.stateBoard);
   });
 
-  socket.on("moveSnake", () => {
+  socket.on("moveSnake", (dir) => {
     snake_to_move = Utility.returnSnake(socket.id, Game.players);
+    snake_to_move.change_direction(dir)
     snake_to_move.move()
     console.table(Game.stateBoard);
     socket.emit("updatedStateBoard", Game.stateBoard);

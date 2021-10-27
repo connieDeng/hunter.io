@@ -103,6 +103,8 @@ class Snake extends Game {
     
   }
 
+  /*
+  MOVING FORWARD
   // moves are: up,down,left,right && turnUp,turnDown,turnLeft,turnRight
   move() {
     let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
@@ -118,6 +120,23 @@ class Snake extends Game {
     }
     stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
   }
+  */
+
+  move() {
+    let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
+    this.cords.unshift(head);
+    if(this.ifCollision(head) === 'apple'){
+      this.score += 10;
+      let old = this.cords[this.cords.length-1];
+      stateBoard[old[0]][old[1]] = this.id;
+      game.addApple();
+    } else {
+      let old = this.cords.pop();
+      stateBoard[old[0]][old[1]] = -1;
+    }
+    stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
+  }
+
 
   destroy(){
     this.cords.forEach(element => {
