@@ -95,7 +95,7 @@ class Snake extends Game {
     let x = head_cord[1];
     let y = head_cord[0];
     // if out of bounds
-    if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1) {
+    if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !==" ") {
       process.exit();
     } else if (stateBoard[head_cord[0]][head_cord[1]]=== 'A'){
       return 'apple';
@@ -114,14 +114,14 @@ class Snake extends Game {
       game.addApple();
     } else {
       let old = this.cords.pop();
-      stateBoard[old[0]][old[1]] = -1;
+      stateBoard[old[0]][old[1]] = " ";
     }
     stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
   }
 
   destroy(){
     this.cords.forEach(element => {
-      stateBoard[element[0]][element[1]] = -1
+      stateBoard[element[0]][element[1]] = " "
     });
 
     playerIDs[this.id] = null;
