@@ -52,12 +52,18 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
 
   socket.on("moveSnake", (dir) => {
     snake_to_move = Utility.returnSnake(socket.id, Game.players);
-    snake_to_move.change_direction(dir)
-    // console.log("socket in server", socket.id)
-    snake_to_move.move(GAME, socket)
-    // console.table(Game.stateBoard);
-    socket.emit("updatedStateBoard", Game.stateBoard);
-    socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
+    if(snake_to_move === undefined){
+      console.log("Game Over")
+    }
+    else{
+      snake_to_move.change_direction(dir)
+      // console.log("socket in server", socket.id)
+      snake_to_move.move(GAME, socket)
+      // console.table(Game.stateBoard);
+      socket.emit("updatedStateBoard", Game.stateBoard);
+      socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
+    }
+    
   });
 
   socket.on("disconnect", () => {  

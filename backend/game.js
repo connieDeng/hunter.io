@@ -102,10 +102,12 @@ class Snake extends Game {
     // if out of bounds
     if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1) {
       return -1;
-    } else if (stateBoard[head_cord[0]][head_cord[1]]=== 'A'){
+    } else if (stateBoard[head_cord[0]][head_cord[1]] === 'A'){
       return 'apple';
-    } 
-    
+    } else if (stateBoard[head_cord[0]][head_cord[1]] !== -1){
+      console.log("body hit")
+      return 'snake';
+    }
   }
 
   /*
@@ -137,7 +139,12 @@ class Snake extends Game {
       let old = this.cords[this.cords.length-1];
       stateBoard[old[0]][old[1]] = this.id;
       // socket.emit("addApple");
-    } else {
+    } 
+    else if(this.ifCollision(head) === 'snake'){
+      this.destroy()
+
+    }
+    else {
       let old = this.cords.pop();
       stateBoard[old[0]][old[1]] = -1;
     }
