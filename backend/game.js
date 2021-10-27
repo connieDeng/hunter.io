@@ -100,8 +100,8 @@ class Snake extends Game {
     let y = head_cord[0];
     // console.log(x,y)
     // if out of bounds
-    if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length || stateBoard[x][y] !== -1) {
-      return -1;
+    if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length-1) {
+      return 'overBound';
     } else if (stateBoard[head_cord[0]][head_cord[1]] === 'A'){
       return 'apple';
     } else if (stateBoard[head_cord[0]][head_cord[1]] !== -1){
@@ -132,27 +132,22 @@ class Snake extends Game {
   move(GAME, socket) {
     // console.log('test', socket)
     let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
-    this.cords.unshift(head);
+    
     if(this.ifCollision(head) === 'apple'){
       GAME.addApple(socket);
       this.score += 10;
-      players[socket.id].score = this.score;
-      
-      // console.table(Utility.sortOnVals(players))
-      socket.emit("updatePlayers", Utility.sortOnVals(players));
-      socket.broadcast.emit("updatePlayers", Utility.sortOnVals(players))
-
       let old = this.cords[this.cords.length-1];
       stateBoard[old[0]][old[1]] = this.id;
+      this.cords.unshift(head);
       // socket.emit("addApple");
     } 
-    else if(this.ifCollision(head) === 'snake'){
+    else if(this.ifCollision(head) === 'snake' || this.ifCollision(head) === 'overBound'){
       this.destroy()
-
     }
     else {
       let old = this.cords.pop();
       stateBoard[old[0]][old[1]] = -1;
+      this.cords.unshift(head);
     }
     stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
   }
