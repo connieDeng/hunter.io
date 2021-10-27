@@ -15,28 +15,32 @@ const createDict = function(num) {
     return dict
 }
 
+
 const getEmptyCoordsforApple = function (stateBoard) {
-    console.table(stateBoard)
-    temp_x = Math.floor(Math.random() * stateBoard.length);
-    temp_y = Math.floor(Math.random() * stateBoard[0].length);
-    console.log("GENERATED COORDS", temp_x, temp_y)
+    max = (stateBoard.length)-1
+    temp_x = Math.floor((Math.random() * max));
+    temp_y = Math.floor((Math.random() * max));
+
     while (stateBoard[temp_x][temp_y] !== -1){
-        temp_x = Math.floor(Math.random() * stateBoard.length);
-        temp_y = Math.floor(Math.random() * stateBoard.length[0]);
-    } 
-    
+        temp_x = Math.floor((Math.random() * max));
+        temp_y = Math.floor((Math.random() * max));
+    }
+
     return [temp_x, temp_y]
 }
 
 const getEmptyCoordsforSnake = function (stateBoard) {
-    temp_x = Math.floor(Math.random() * stateBoard.length-5) + 5;
-    temp_y = Math.floor(Math.random() * stateBoard.length-5) + 5
+    min_x = stateBoard.length/2;
+    max_x = stateBoard.length-2;
 
+    temp_x = Math.floor(Math.random() * (max_x - min_x) + min_x);
+    temp_y = Math.floor(Math.random() * stateBoard.length-2);
+    
     while (stateBoard[temp_x][temp_y] !== -1 && stateBoard[temp_x+1][temp_y] !== -1){
-        Math.floor(Math.random() * stateBoard.length-5) + 5;
-        Math.floor(Math.random() * stateBoard.length-5) + 5;
+        temp_x = Math.floor(Math.random() * (max_x - min_x) + min_x);
+        temp_y = Math.floor(Math.random() * stateBoard.length-2);
     } 
-
+    
     return [temp_x, temp_y]
 }
 
