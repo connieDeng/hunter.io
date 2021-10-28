@@ -90,7 +90,7 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
 });
 
 //Start Server
-server.listen(4000, () => {
+server.listen(process.env.PORT || 4000, () => {
   console.log("Server Has Started");
 });
 
