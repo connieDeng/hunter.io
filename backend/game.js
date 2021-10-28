@@ -34,10 +34,10 @@ class Game {
 
     addApple(socket){
       let apple_cords = Utility.getEmptyCoordsforApple(stateBoard);
-      console.log("apple coords", apple_cords)
+      // console.log("apple coords", apple_cords)
       stateBoard[apple_cords[0]][apple_cords[1]] = 'A';
       apples[[apple_cords[0], apple_cords[1]]] = [apple_cords[0], apple_cords[1]];
-      console.log(apples)
+      // console.log(apples)
       socket.emit("updatedStateBoard", stateBoard);
       socket.broadcast.emit("updatedStateBoard", stateBoard)
     }
@@ -160,7 +160,7 @@ class Snake extends Game {
   }
 
   destroy(){
-    console.log('destroy')
+    console.log("destroy in game")
     this.cords.forEach(element => {
       stateBoard[element[0]][element[1]] = -1
     });

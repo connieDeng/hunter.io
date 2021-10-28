@@ -7,19 +7,16 @@ export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
     const [players, setPlayers] = useState({})
     const [gameOver, setGameOver] = useState(false); 
-    const startGame = () => { 
-        if (gameOver == false) {
-            socket.emit("initPlayer");
-        
-            socket.on("initializedPlayer", (board) => {
-                setBoard(board);
-            }); 
-        }
-    };
+    // const [disableButton, setDisableButton] = useState(false); 
     
-    socket.on("playerMoved", (board) => { 
-        console.log("player moved")
-    });
+    const startGame = () => { 
+        setGameOver(false);
+        socket.emit("initPlayer");
+
+        socket.on("initializedPlayer", (board) => {
+            setBoard(board);
+        }); 
+    };
 
     socket.on("updatedStateBoard", (board) => { 
         setBoard(board);
@@ -27,11 +24,10 @@ export const SuccessLogin = (props) => {
 
     socket.on("updatePlayers", (players) => { 
         setPlayers(players);
-        console.log(players)
+        // console.log(players)
     });
 
     socket.on("GameOver", () => {
-        // document.getElementById("gameOver").innerHTML = "Game Over";
         setGameOver(true);
     });
     
@@ -55,30 +51,37 @@ export const SuccessLogin = (props) => {
         color: "darkblue",
         margin: 0,
         padding: 0,
-        width: '20px',
-        height:'20px',
+        minWidth: '20px',
+        minHeight: '20px',
+        maxWidth: '20px',
+        maxHeight:'20px',
     };
 
     let appleSquare = {
-        backgroundColor: "red",
+        // backgroundColor: "red",
+        overflow: "hidden",
         color: "red",
         margin: 0,
         padding: 0,
-        width: '20px',
-        height:'20px',
+        minWidth: '20px',
+        minHeight: '20px',
+        maxWidth: '20px',
+        maxHeight:'20px',
     }
 
     let emptySqure = {
         // backgroundColor: "lightgreen",
-        color: "lightgreen",
+        color: "#ACDF81",
         margin: 0,
         padding: 0,
-        width: '20px',
-        height:'20px',
+        minWidth: '20px',
+        minHeight: '20px',
+        maxWidth: '20px',
+        maxHeight:'20px',
     }
     let emptySqureDark = {
         color: "#52AF4B",
-        backgroundColor: "#52AF4B",
+        backgroundColor: "#ACDF81",
         margin: 0,
         padding: 0,
         width: '20px',
@@ -86,32 +89,40 @@ export const SuccessLogin = (props) => {
     }
 
     let leaderBoard = {
-        backgroundColor:'green',
-        color: "white",
-        width: '200px',
-        height:'200px',
+        backgroundColor:'#bcdce8',
+        color: "black",
+        width: '12em',
+        height:'10em',
         textAlign: "center",
+        marginBottom: '5%',
+        marginLeft: '1%',
         border: "2px solid black",
+        padding: '1%',
     }
 
-    let boardContent = {
-        textAlign: "center"
+    let container = {
+        height: "50em",
+        margin: "auto",
+        width: "100%",
+        textAlign:"center",
     }
 
     return(
-        <section className='container' onKeyDown={(e) => keyHandler(e)} tabIndex="0">
-            <div>
-                <div> {"Free For All"} </div>
+        <section style={{height:'100vh', backgroundColor:"lightgrey"}}>
+        <section className='container' style={container}>
+            <section onKeyDown={(e) => keyHandler(e)} tabIndex="0" style={{paddingTop: '6%', outline: "none"}}>
+            <div style={{paddingBottom: '1.5%'}}>
+                <h1 style={{fontSize:"1.5em"}}> {"Hunter.io Free For All"} </h1>
                 <div> {"Press Start Game and control your snake using arrow keys"} </div>
            </div>
            <div style={{ display: "flex", alignItems: "center"}}>
-           <div style={{padding: 10, justifyContent: "center"}}>
+           <div style={{padding: '10px', justifyContent: "center", paddingLeft:"30%"}}>
                 <div>
                 { board !== null ? 
                     <table style={{ 
                         border: "2px solid black",
                         width: '400px',
-                        backgroundColor: "lightgreen",
+                        backgroundColor: "#ACDF81",
                         borderCollapse: "collapse",
                         // border: "0"
                     }}
@@ -124,7 +135,7 @@ export const SuccessLogin = (props) => {
                                     { col === -1
                                         ? <td style={emptySqure}>{'●'}</td>
                                         : ( col === 'A'
-                                            ? <td style={appleSquare}>{'●'}</td> /* apple */
+                                            ? <td style={appleSquare}>{'🍎'}</td> /* apple */
                                             : <td style={snakeSquare}>{'●'}</td> /* snake */
                                         )
                                     }
@@ -139,7 +150,12 @@ export const SuccessLogin = (props) => {
                             </tr>
                         ))} 
                     </table> :
-                    <div> </div>
+                    <div style={{
+                        border: "2px solid black",
+                    height: '400px',
+                    width: '400px',
+                    backgroundColor: "#ACDF81",
+                    borderCollapse: "collapse",}}></div>
                 }
                 </div>
         
@@ -148,19 +164,21 @@ export const SuccessLogin = (props) => {
            </div>
             
             <section style={leaderBoard}>
-                <div>LEADER BOARD</div>
+                <div style={{fontWeight:"bold"}}>LEADER BOARD</div>
                 <table>
                 {
                     Object.entries(players)
                     .map(([key, value]) => 
-                        <tr>
-                            {`Snake ${value[1].id} has ${value[2]} points \n`}
+                        <tr style={{textAlign:"center"}}>
+                            {`${Number(key)+1}) Snake ${value[1].id} has ${value[2]} points \n`}
                         </tr>
                     )
                 }
                 </table>
             </section>
             </div>
+        </section>
+        </section>
         </section>
     );
     

@@ -71,17 +71,15 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
       socket.emit("updatedStateBoard", Game.stateBoard);
       socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
     }
-    
   });
 
   socket.on("disconnect", () => {  
+    console.log('Destroying')
+
     if(Utility.returnSnake(socket.id, Game.players) !== undefined){
-      console.log('Destroying')
       snake_to_destroy = Utility.returnSnake(socket.id, Game.players)
       Game.numPlayers -= 1;
       snake_to_destroy.destroy()
-
-      console.table(Game.stateBoard)
       socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
 
       socket.emit("updatePlayers", Utility.sortOnVals(Game.players));
