@@ -5,7 +5,7 @@ const sortOnKeys = (dict) => {
     
     // Sort the array based on the second element
     items.sort(function(first, second) {
-    return second[1] - first[1];
+    return second[5] - first[5];
     });     
 
     return items
