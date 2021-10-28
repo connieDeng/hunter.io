@@ -6,12 +6,14 @@ import socket from "../socket";
 export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
     const [players, setPlayers] = useState({})
+    const [gameOver, setGameOver] = useState(false); 
     const startGame = () => { 
         socket.emit("initPlayer");
         
         socket.on("initializedPlayer", (board) => {
             setBoard(board);
         }); 
+        setGameOver(false)
     };
     
     socket.on("playerMoved", (board) => { 
@@ -25,6 +27,11 @@ export const SuccessLogin = (props) => {
     socket.on("updatePlayers", (players) => { 
         setPlayers(players);
         console.log(players)
+    });
+
+    socket.on("GameOver", () => {
+        // document.getElementById("gameOver").innerHTML = "Game Over";
+        setGameOver(true);
     });
     
     const keyHandler = (event) => {
@@ -71,53 +78,60 @@ export const SuccessLogin = (props) => {
 
     let leaderBoard = {
         backgroundColor:'green',
+        color: "white",
         width: '200px',
         height:'200px',
     }
 
     return(
-        <section className='container' onKeyDown={(e) => keyHandler(e)} style={{position:"absolute"}} tabIndex="0">
-            <div> {"Free For All"} </div>
-            <div> {"Press Start Game and control your snake using arrow keys"} </div>
-            <div> 
-            { board !== null ? 
-                <table style={{ 
-                    border: "2px solid black",
-                    width: '400px',
-                    backgroundColor: "lightgreen",
-                    borderCollapse: "collapse",
-                    // border: "0"
-                 }}
-                >
-                    {board.map((row, i) => (
-                        <tr key={i} style={{borderCollapse: "collapse", border: 0}}>
-                        {row.map((col, j) => (
-                            // <span>{col}</span>
-                            <td>
-                                { col === -1
-                                    ? <td style={emptySqure}>{'●'}</td>
-                                    : ( col === 'A'
-                                        ? <td style={appleSquare}>{'●'}</td> /* apple */
-                                        : <td style={snakeSquare}>{'●'}</td> /* snake */
-                                    )
-                                }
-                                {/* <span>
-                                {col === -1
-                                    ? <span style={{padding:'5px'}}>{' '}</span>
-                                    : <span>{'U'}</span>
-                                }
-                                </span> */}
-                            </td>
-                        ))}
-                        </tr>
-                    ))} 
-                </table> :
-                <div> </div>
-            }
-            </div>
-      
-            <button onClick={startGame}>Start Game</button>
-
+        <section className='container' onKeyDown={(e) => keyHandler(e)} tabIndex="0">
+            <div>
+                <div> {"Free For All"} </div>
+                <div> {"Press Start Game and control your snake using arrow keys"} </div>
+           </div>
+           <div style={{position:"absolute", display: "flex", alignItems: "center"}}>
+           <div style={{padding: 10, justifyContent: "center"}}>
+                <div>
+                { board !== null ? 
+                    <table style={{ 
+                        border: "2px solid black",
+                        width: '400px',
+                        backgroundColor: "lightgreen",
+                        borderCollapse: "collapse",
+                        // border: "0"
+                    }}
+                    >
+                        {board.map((row, i) => (
+                            <tr key={i} style={{borderCollapse: "collapse", border: 0}}>
+                            {row.map((col, j) => (
+                                // <span>{col}</span>
+                                <td>
+                                    { col === -1
+                                        ? <td style={emptySqure}>{'●'}</td>
+                                        : ( col === 'A'
+                                            ? <td style={appleSquare}>{'●'}</td> /* apple */
+                                            : <td style={snakeSquare}>{'●'}</td> /* snake */
+                                        )
+                                    }
+                                    {/* <span>
+                                    {col === -1
+                                        ? <span style={{padding:'5px'}}>{' '}</span>
+                                        : <span>{'U'}</span>
+                                    }
+                                    </span> */}
+                                </td>
+                            ))}
+                            </tr>
+                        ))} 
+                    </table> :
+                    <div> </div>
+                }
+                </div>
+        
+                <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px"}} onClick={startGame}>START GAME</button>
+                {gameOver ? <p>GAME OVER</p> :  <p></p>}
+           </div>
+            
             <section style={leaderBoard}>
                 <div>Leader Board</div>
                 <table>
@@ -131,6 +145,7 @@ export const SuccessLogin = (props) => {
                 }
                 </table>
             </section>
+            </div>
         </section>
     );
     

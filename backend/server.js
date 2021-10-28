@@ -61,6 +61,7 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     snake_to_move = Utility.returnSnake(socket.id, Game.players);
     if(snake_to_move === undefined){
       console.log("Game Over")
+      socket.emit("GameOver")
     }
     else{
       snake_to_move.change_direction(dir)
