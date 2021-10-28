@@ -133,6 +133,8 @@ class Snake extends Game {
     // console.log('test', socket)
     let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
     this.cords.unshift(head);
+    console.log(head)
+    console.table(stateBoard)
     if(this.ifCollision(head) === 'apple'){
       GAME.addApple(socket);
       this.score += 10;
