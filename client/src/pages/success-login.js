@@ -45,24 +45,57 @@ export const SuccessLogin = (props) => {
         socket.emit("moveSnake", "down");
       }
     };
+
+    let snakeSquare = {
+        backgroundColor: "darkblue",
+        color: "darkblue",
+        margin: 0,
+        padding: 0,
+
+    };
+
+    let appleSquare = {
+        backgroundColor: "red",
+        color: "red",
+        margin: 0,
+        padding: 0
+    }
+
+    let emptySqure = {
+        // backgroundColor: "lightgreen",
+        color: "lightgreen",
+        margin: 0,
+        padding: 0,
+        
+    }
+
+
+
     
     return(
-        <section className='container' onKeyDown={(e) => keyHandler(e)} style={{backgroundColor:"lightBlue", position:"absolute"}} tabIndex="0">
+        <section className='container' onKeyDown={(e) => keyHandler(e)} style={{position:"absolute"}} tabIndex="0">
             <div> {"honestly please why"} </div>
             
             <div> 
             { board !== null ? 
-                <table>
+                <table style={{ 
+                    border: "2px solid black",
+                    width: `${window.innerWidth / 1.3}px`,
+                    backgroundColor: "lightgreen",
+                    borderCollapse: "collapse",
+                    // border: "0"
+                 }}
+                >
                     {board.map((row, i) => (
-                        <tr key={i}>
+                        <tr key={i} style={{borderCollapse: "collapse", border: 0}}>
                         {row.map((col, j) => (
                             // <span>{col}</span>
                             <td>
                                 { col === -1
-                                    ? <td>{'●'}</td>
+                                    ? <td style={emptySqure}>{'●'}</td>
                                     : ( col === 'A'
-                                        ? <td>{'A'}</td>
-                                        : <td>{col}</td>
+                                        ? <td style={appleSquare}>{'●'}</td> /* apple */
+                                        : <td style={snakeSquare}>{'●'}</td> /* snake */
                                     )
                                 }
                                 {/* <span>
