@@ -14,6 +14,7 @@ const Game = require('./game');
 const Utility = require('./utility');
 const { connect } = require("http2");
 const { default: socket } = require("../client/src/socket");
+const path = require("path");
 
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
 app.use(express.static(path.join(dirname, '../client/build')));
