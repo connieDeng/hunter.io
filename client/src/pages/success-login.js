@@ -8,12 +8,13 @@ export const SuccessLogin = (props) => {
     const [players, setPlayers] = useState({})
     const [gameOver, setGameOver] = useState(false); 
     const startGame = () => { 
-        socket.emit("initPlayer");
+        if (gameOver == false) {
+            socket.emit("initPlayer");
         
-        socket.on("initializedPlayer", (board) => {
-            setBoard(board);
-        }); 
-        setGameOver(false)
+            socket.on("initializedPlayer", (board) => {
+                setBoard(board);
+            }); 
+        }
     };
     
     socket.on("playerMoved", (board) => { 
@@ -75,12 +76,26 @@ export const SuccessLogin = (props) => {
         width: '20px',
         height:'20px',
     }
+    let emptySqureDark = {
+        color: "#52AF4B",
+        backgroundColor: "#52AF4B",
+        margin: 0,
+        padding: 0,
+        width: '20px',
+        height:'20px',
+    }
 
     let leaderBoard = {
         backgroundColor:'green',
         color: "white",
         width: '200px',
         height:'200px',
+        textAlign: "center",
+        border: "2px solid black",
+    }
+
+    let boardContent = {
+        textAlign: "center"
     }
 
     return(
@@ -89,7 +104,7 @@ export const SuccessLogin = (props) => {
                 <div> {"Free For All"} </div>
                 <div> {"Press Start Game and control your snake using arrow keys"} </div>
            </div>
-           <div style={{position:"absolute", display: "flex", alignItems: "center"}}>
+           <div style={{ display: "flex", alignItems: "center"}}>
            <div style={{padding: 10, justifyContent: "center"}}>
                 <div>
                 { board !== null ? 
@@ -102,7 +117,7 @@ export const SuccessLogin = (props) => {
                     }}
                     >
                         {board.map((row, i) => (
-                            <tr key={i} style={{borderCollapse: "collapse", border: 0}}>
+                            <tr key={i}>
                             {row.map((col, j) => (
                                 // <span>{col}</span>
                                 <td>
@@ -128,12 +143,12 @@ export const SuccessLogin = (props) => {
                 }
                 </div>
         
-                <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px"}} onClick={startGame}>START GAME</button>
+                <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={startGame}>START GAME</button>
                 {gameOver ? <p>GAME OVER</p> :  <p></p>}
            </div>
             
             <section style={leaderBoard}>
-                <div>Leader Board</div>
+                <div>LEADER BOARD</div>
                 <table>
                 {
                     Object.entries(players)
@@ -150,3 +165,4 @@ export const SuccessLogin = (props) => {
     );
     
 }
+//style={(j % 2 && i % 2) ? emptySqure: emptySqureDark}
