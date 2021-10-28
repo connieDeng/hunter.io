@@ -26,10 +26,6 @@ export const SuccessLogin = (props) => {
         setPlayers(players);
         console.log(players)
     });
-
-    const moveSnake = () => {
-        socket.emit("moveSnake");
-    };
     
     const keyHandler = (event) => {
         // changing the state to the name of the key
@@ -51,14 +47,17 @@ export const SuccessLogin = (props) => {
         color: "darkblue",
         margin: 0,
         padding: 0,
-
+        width: '20px',
+        height:'20px',
     };
 
     let appleSquare = {
         backgroundColor: "red",
         color: "red",
         margin: 0,
-        padding: 0
+        padding: 0,
+        width: '20px',
+        height:'20px',
     }
 
     let emptySqure = {
@@ -66,21 +65,25 @@ export const SuccessLogin = (props) => {
         color: "lightgreen",
         margin: 0,
         padding: 0,
-        
+        width: '20px',
+        height:'20px',
     }
 
+    let leaderBoard = {
+        backgroundColor:'green',
+        width: '200px',
+        height:'200px',
+    }
 
-
-    
     return(
         <section className='container' onKeyDown={(e) => keyHandler(e)} style={{position:"absolute"}} tabIndex="0">
-            <div> {"honestly please why"} </div>
-            
+            <div> {"Free For All"} </div>
+            <div> {"Press Start Game and control your snake using arrow keys"} </div>
             <div> 
             { board !== null ? 
                 <table style={{ 
                     border: "2px solid black",
-                    width: `${window.innerWidth / 1.3}px`,
+                    width: '400px',
                     backgroundColor: "lightgreen",
                     borderCollapse: "collapse",
                     // border: "0"
@@ -109,27 +112,26 @@ export const SuccessLogin = (props) => {
                         </tr>
                     ))} 
                 </table> :
-                <div> NO BOARD </div>
+                <div> </div>
             }
             </div>
       
-            {/* <button onClick={}>CHANGE DIR</button> */}
-            <button onClick={moveSnake}>MOVE</button>
             <button onClick={startGame}>Start Game</button>
-            {/* <input type="text" onKeyPress={(e) => handler(e)} /> */}
 
-
-            <div>Leader Board</div>
-            <table>
-            {
-                Object.entries(players)
-                .map(([key, value]) => 
-                    <tr>
-                        {`Snake ${value[1].id} has ${value[2]} points \n`}
-                    </tr>
-                )
-            }
-            </table>
+            <section style={leaderBoard}>
+                <div>Leader Board</div>
+                <table>
+                {
+                    Object.entries(players)
+                    .map(([key, value]) => 
+                        <tr>
+                            {`Snake ${value[1].id} has ${value[2]} points \n`}
+                        </tr>
+                    )
+                }
+                </table>
+            </section>
+            
         </section>
     );
     

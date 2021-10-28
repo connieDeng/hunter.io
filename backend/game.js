@@ -3,7 +3,6 @@ const Utility = require("./utility")
 let stateBoard = Utility.createStateBoard(20,20);
 let playerIDs = Utility.createDict(10);
 let players = {};
-let numApples = 0;
 let numPlayers = 0;
 
 class Game {
@@ -36,8 +35,6 @@ class Game {
       let apple_cords = Utility.getEmptyCoordsforApple(stateBoard);
       console.log("apple coords", apple_cords)
       stateBoard[apple_cords[0]][apple_cords[1]] = 'A';
-      numApples += 1
-
       socket.emit("updatedStateBoard", stateBoard);
       socket.broadcast.emit("updatedStateBoard", stateBoard)
     }
@@ -95,13 +92,13 @@ class Snake extends Game {
   }
 
   ifCollision(head_cord){
-    // console.log([head_cord, stateBoard[head_cord[0]][head_cord[1]], stateBoard[head_cord[0]][head_cord[1]]=== 'A']);
     let x = head_cord[1];
     let y = head_cord[0];
-    // console.log(x,y)
+    console.log(x,y)
     // if out of bounds
-    if (x < 0 || y < 0 || x > stateBoard.length || y > stateBoard.length-1) {
-      return 'overBound';
+    if (x < 0 || y < 0 || x >= stateBoard.length || y >= stateBoard.length) {
+      console.log('boundary hit')
+      return 'bounds';
     } else if (stateBoard[head_cord[0]][head_cord[1]] === 'A'){
       return 'apple';
     } else if (stateBoard[head_cord[0]][head_cord[1]] !== -1){
@@ -132,29 +129,32 @@ class Snake extends Game {
   move(GAME, socket) {
     // console.log('test', socket)
     let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
-    this.cords.unshift(head);
-    // console.log(head)
-    // console.table(stateBoard)
-    if(this.ifCollision(head) === 'apple'){
-      GAME.addApple(socket);
-      this.score += 10;
-      let old = this.cords[this.cords.length-1];
-      stateBoard[old[0]][old[1]] = this.id;
+    
+    if(this.ifCollision(head) === 'bounds' || this.ifCollision(head) === 'snake'){
+      this.destroy();
+    } else {
       this.cords.unshift(head);
-      // socket.emit("addApple");
-    } 
-    else if(this.ifCollision(head) === 'snake' || this.ifCollision(head) === 'overBound'){
-      this.destroy()
+      if (this.ifCollision(head) === 'apple'){
+        GAME.addApple(socket);
+        this.score += 10;
+        players[socket.id].score = this.score;
+        
+        socket.emit("updatePlayers", Utility.sortOnVals(players));
+        socket.broadcast.emit("updatePlayers", Utility.sortOnVals(players))
+  
+        let old = this.cords[this.cords.length-1];
+        stateBoard[old[0]][old[1]] = this.id;
+      } else {
+        let old = this.cords.pop();
+        stateBoard[old[0]][old[1]] = -1;
+      }
+      stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
     }
-    else {
-      let old = this.cords.pop();
-      stateBoard[old[0]][old[1]] = -1;
-      this.cords.unshift(head);
-    }
-    stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
   }
 
   destroy(){
+    console.log(this.cords)
+    console.table(stateBoard)
     this.cords.forEach(element => {
       stateBoard[element[0]][element[1]] = -1
     });
@@ -163,51 +163,4 @@ class Snake extends Game {
     delete players[this.socket_id];
   }
 }
-
-// driver code here
-// const readline = require('readline');
-// readline.emitKeypressEvents(process.stdin);
-// process.stdin.setRawMode(true);
-
-
-// function main (){
-//   // create new game
-//   game = new Game()
-
-//   // create and include one snake
-//   let bot1 = game.createSnake("bot")
-//   game.addSnake(bot1)
-
-//   // let bot2 = game.createSnake("bot")
-//   // game.addSnake(bot2)
-  
-//   // generate food
-//   game.addApple()
-  
-//   start_game();
-  
-//   process.stdin.on('keypress', (str, key) => {
-//     if (key.ctrl && key.name === 'c') {
-//       process.exit();
-//     } else {
-//       console.log("You pressed the", key.name, "key");
-//       bot1.change_direction(key.name)
-//       // bot2.change_direction(key.name)
-//     }
-//   });
-
-//   function start_game() {
-//     timeout = setTimeout(function onTick() {
-//       console.clear();
-//       bot1.move();
-//       // bot2.move();
-//       start_game();
-//     }, 300)
-//   }
-// }
-
-
-// main();
-
-// console.table(stateBoard)
-module.exports = { Game, Snake, stateBoard, numApples, numPlayers, players, playerIDs};
+module.exports = { Game, Snake, stateBoard, numPlayers, players, playerIDs};

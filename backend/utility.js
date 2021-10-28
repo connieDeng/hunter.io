@@ -1,3 +1,5 @@
+const { stateBoard } = require("./game");
+
 // given array, find first empty index
 const getRandomId = function (dict) {
     for (const [key, value] of Object.entries(dict)) {

@@ -40,10 +40,9 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     socket.emit("updatedStateBoard", Game.stateBoard);
     socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
 
-    socket.emit("updatedStateBoard", Game.stateBoard);
-    socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
+    // socket.emit("updatedStateBoard", Game.stateBoard);
+    // socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
     // console.table(Game.stateBoard);
-    console.table(Game.players)
   });
 
   socket.on("moveSnake", (dir) => {
@@ -68,7 +67,12 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
       snake_to_destroy = Utility.returnSnake(socket.id, Game.players)
       Game.numPlayers -= 1;
       snake_to_destroy.destroy()
+
+      console.table(Game.stateBoard)
       socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
+
+      socket.emit("updatePlayers", Utility.sortOnVals(Game.players));
+      socket.broadcast.emit("updatePlayers", Utility.sortOnVals(Game.players));
     }
   });
 });
