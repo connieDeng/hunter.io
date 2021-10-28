@@ -4,6 +4,7 @@ let stateBoard = Utility.createStateBoard(20,20);
 let playerIDs = Utility.createDict(10);
 let players = {};
 let numPlayers = 0;
+let apples = {};
 
 class Game {
     constructor() {
@@ -35,6 +36,8 @@ class Game {
       let apple_cords = Utility.getEmptyCoordsforApple(stateBoard);
       console.log("apple coords", apple_cords)
       stateBoard[apple_cords[0]][apple_cords[1]] = 'A';
+      apples[[apple_cords[0], apple_cords[1]]] = [apple_cords[0], apple_cords[1]];
+      console.log(apples)
       socket.emit("updatedStateBoard", stateBoard);
       socket.broadcast.emit("updatedStateBoard", stateBoard)
     }
@@ -94,7 +97,7 @@ class Snake extends Game {
   ifCollision(head_cord){
     let x = head_cord[1];
     let y = head_cord[0];
-    console.log(x,y)
+    // console.log(x,y)
     // if out of bounds
     if (x < 0 || y < 0 || x >= stateBoard.length || y >= stateBoard.length) {
       console.log('boundary hit')
@@ -135,6 +138,10 @@ class Snake extends Game {
     } else {
       this.cords.unshift(head);
       if (this.ifCollision(head) === 'apple'){
+        let appleToDelete = Object.values(apples)[0];
+        let stringKey = String(appleToDelete[0]) + ',' + String(appleToDelete[1])
+        delete apples[stringKey];
+
         GAME.addApple(socket);
         this.score += 10;
         players[socket.id].score = this.score;
@@ -153,12 +160,17 @@ class Snake extends Game {
   }
 
   destroy(){
-    console.log(this.cords)
-    console.table(stateBoard)
+    console.log('destroy')
     this.cords.forEach(element => {
       stateBoard[element[0]][element[1]] = -1
     });
 
+    // ridding of apple 
+    let appleToDelete = Object.values(apples)[0];
+    stateBoard[appleToDelete[0]][appleToDelete[1]] = -1;
+    let stringKey = String(appleToDelete[0]) + ',' + String(appleToDelete[1]);
+    delete apples[stringKey];
+    
     playerIDs[this.id] = null;
     delete players[this.socket_id];
   }
