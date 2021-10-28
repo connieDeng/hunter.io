@@ -17,7 +17,7 @@ const { default: socket } = require("../client/src/socket");
 const path = require("path");
 
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
-app.use(express.static(path.join(dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('*', (req, res, next) => {
   // console.log(path.resolve(__dirname, "../client", "build/index.html"));
