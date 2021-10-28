@@ -10,16 +10,27 @@ const bodyParser = require("body-parser");
 const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
-const server = http.createServer(app);
 const Game = require('./game');
 const Utility = require('./utility');
 const { connect } = require("http2");
+const { default: socket } = require("../client/src/socket");
+
 //----------------------------------------- END OF IMPORTS---------------------------------------------------
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:3000"
-  }
+app.use(express.static(path.join(dirname, '../client/build')));
+
+app.get('*', (req, res, next) => {
+  // console.log(path.resolve(__dirname, "../client", "build/index.html"));
+  res.sendFile(path.resolve(__dirname, "../client", "build/index.html"))
 });
+
+const server = http.createServer(app);
+
+const socketServerOptions = { };
+if (process.env.NODE_ENV !== "production"){
+  socketServerOptions.cors = { origin: "http://localhost:3000" };
+}
+
+const io = new Server(server, socketServerOptions);
 
 //SOCKET.IO 
 //connection class
@@ -81,3 +92,4 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
 server.listen(4000, () => {
   console.log("Server Has Started");
 });
+

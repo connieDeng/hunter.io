@@ -1,0 +1,23 @@
+{
+  "name": "hunter.io",
+  "version": "1.0.0",
+  "description": "Hunter.io is a revamp of the classic snake game introducing multiplayer, powerups, and changing terrain. It will have two modes 1v1 and Free for All.",  
+  "scripts": {
+    "build:client": "cd ./client; yarn install && yarn build",
+    "build:server": "cd ./backend; yarn install",
+    "start": "cd ./backend; yarn start",
+    "build": "yarn run build:client && yarn run build:server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connieDeng/hunter.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/connieDeng/hunter.io/issues"
+  },
+  "homepage": "https://github.com/connieDeng/hunter.io#readme"
+}
+

@@ -131,7 +131,6 @@ export const SuccessLogin = (props) => {
                 }
                 </table>
             </section>
-            
         </section>
     );
     
