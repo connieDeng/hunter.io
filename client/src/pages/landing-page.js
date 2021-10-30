@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import auth from './../components/auth';
+import auth from '../components/auth';
 import Axios from "axios";
+
 
 export const LandingPage = (props) => {
     const history = useHistory();
@@ -30,11 +31,12 @@ export const LandingPage = (props) => {
     }
    
     return(
-        <div>
-            <div>Hunter.io landing page</div>
-            
-            <div>
-                <h1>Login</h1>
+        
+        <div style={{backgroundImage:'url("background.jpg")',backgroundColor:'pink',height:'1000px',width:'100%',backgroundPosition:'0px 0px'}}>  
+                 
+            <div></div>
+            <div style={{ textAlign:"center"}}>
+                <h1 style={{fontSize:'60px' ,textAlign:"center",color:'purple'}}>Hunter.io</h1>
                 <input
                 placeholder="username"
                 onChange={(e) => setLoginUsername(e.target.value)}
@@ -43,10 +45,13 @@ export const LandingPage = (props) => {
                 placeholder="password"
                 onChange={(e) => setLoginPassword(e.target.value)}
                 />
+
+                
                 <button onClick={() => login}>Submit</button>
-            </div>
+                
 
             <button
+                
                 onClick={() => {
                     auth.login(() => {
                         props.history.push("/hunter.io");
@@ -56,13 +61,19 @@ export const LandingPage = (props) => {
                 Login
             </button>
             <br/>
+            <a herf="register-page.js" style={{textAlign:'center' }}>Not registered? Click here to register now.</a>
+            
+            </div>
             <br/>
-            <section>
+            <br/>
+            <section style={{position:'absolute',bottom:'30%',left:"50%", textAlign:'center', marginLeft:'-100px'}}>
                 <span>Enter Nickname Here:</span>
+                <br/>
                 <input onChange={(e) => setNickname(e.target.value)}></input>
                 <button onClick={() => submitToFFA(nickname)}>Play FFA</button>
             </section>
         </div> 
+        
     );
     
 }
