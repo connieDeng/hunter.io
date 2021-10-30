@@ -31,8 +31,8 @@ export const LandingPage = (props) => {
     }
    
     return(
-        
-        <div style={{backgroundImage:'url("background.jpg")',backgroundColor:'pink',height:'1000px',width:'100%',backgroundPosition:'0px 0px'}}>  
+
+        <div style={{backgroundImage:'url("background.jpg")',backgroundColor:'pink',height:'1000px',width:'100%',marginTop:'0px'}}>  
                  
             <div></div>
             <div style={{ textAlign:"center"}}>
@@ -61,8 +61,7 @@ export const LandingPage = (props) => {
                 Login
             </button>
             <br/>
-            <a herf="register-page.js" style={{textAlign:'center' }}>Not registered? Click here to register now.</a>
-            
+            <a href="/success-login.js">Not registered? Click here to register now.</a>
             </div>
             <br/>
             <br/>
