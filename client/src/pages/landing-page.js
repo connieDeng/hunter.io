@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import auth from './../components/auth';
 import Axios from "axios";
-import socket from "../socket";
 
 export const LandingPage = (props) => {
     const history = useHistory();
@@ -28,7 +27,6 @@ export const LandingPage = (props) => {
             pathname: "/game",
             state : { nickname: nickname }
         });
-        socket.emit('setNickname',nickname);
     }
    
     return(
@@ -68,7 +66,11 @@ export const LandingPage = (props) => {
             </button>
             <br/>
 <<<<<<< HEAD
+<<<<<<< HEAD
             <a href="/register-page.js">Not registered? Click here to register now.</a>
+=======
+            <a href="/success-login.js">Not registered? Click here to register now.</a>
+>>>>>>> parent of 641f3c6 (update)
             </div>
             <br/>
 =======

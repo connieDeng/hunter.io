@@ -23,9 +23,7 @@ export const SuccessLogin = (props) => {
     socket.on("updatedStateBoard", (board) => { 
         setBoard(board);
     });
-    socket.on("updateNickname",(nickname)=>{
-        
-    });
+
     const moveSnake = () => {
         socket.emit("moveSnake");
     };
