@@ -24,7 +24,6 @@ export const LandingPage = (props) => {
     };
 
     const submitToFFA = (nickname) =>{ 
-        console.log(nickname)
         history.push({
             pathname: "/game",
             state : { nickname: nickname }

@@ -24,7 +24,7 @@ export const SuccessLogin = (props) => {
         setBoard(board);
     });
     socket.on("updateNickname",(nickname)=>{
-        
+        console.log(nickname);
     });
     const moveSnake = () => {
         socket.emit("moveSnake");

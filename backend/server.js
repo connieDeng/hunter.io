@@ -50,6 +50,7 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
   socket.on("setNickname", (nickname) =>
   {
     snake.nickname=nickname;
+    console.log(nickname);
     socket.broadcast.emit("updateNickname",nickname);
   });
   socket.on("disconnect", () => {  
