@@ -47,6 +47,17 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
   });
 
+  socket.on("setNickname", (nickname) =>
+  {
+    console.log(nickname);
+    snake=Utility.returnSnake(socket.id, Game.players);
+    snake.nickname=nickname;    
+    socket.emit("UpdateNickname",nickname);
+    socket.broadcast.emit("updateNickname",nickname);
+
+  });
+
+
   socket.on("disconnect", () => {  
     if(Utility.returnSnake(socket.id, Game.players) !== undefined){
       console.log('Destroying')

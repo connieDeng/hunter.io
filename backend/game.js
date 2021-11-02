@@ -54,6 +54,7 @@ class Snake extends Game {
       this.dx = -1;
       //horizontal
       this.dy = 0;
+      this.nikename='';
   }
 
   set_direction(newDir) {
