@@ -6,6 +6,7 @@ class Snake {
         this.id = ID 
         this.start = 38
         this.speed = 1
+
         // this.direction = constant.DIRECTIONS
         // this.number = player_count
         // this.body = constant.SNAKE_START

@@ -12,9 +12,9 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        {/* <Route exact path="/" component={LandingPage} /> */}
-        <Route exact path="/" component={SuccessLogin} />
-        {/* <Route exact path="/game" component={Game} /> */}
+        { <Route exact path="/game" component={SuccessLogin} /> }
+        <Route exact path="/" component={LandingPage} />
+        {/*<Route exact path="/game" component={Game} /> */}
         <Route path="*" component={() => "404 NOT FOUND"} />
       </Switch>
     </BrowserRouter>
