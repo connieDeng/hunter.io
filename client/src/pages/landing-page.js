@@ -27,7 +27,7 @@ export const LandingPage = (props) => {
             pathname: "/game",
             state : { nickname: nickname }
         });
-        socket.emit('setNickname', nickname);
+        socket.emit('saveNickname', nickname);
     }
    
     return(

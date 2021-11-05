@@ -78,11 +78,15 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     console.log(nickname);
     snake=Utility.returnSnake(socket.id, Game.players);
     snake.nickname=nickname;    
-    socket.emit("updatePlayers",snake);
-    socket.broadcast.emit("updatePlayers",snake);
+    // socket.emit("updatePlayers",snake);
+    // socket.broadcast.emit("updatePlayers",snake);
 
   });
 
+  socket.on("saveNickname", (nickname)=>
+  {
+    socket.emit("playerNickname",nickname);
+  });
 
   socket.on("disconnect", () => {  
     console.log('Destroying')

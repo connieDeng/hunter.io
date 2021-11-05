@@ -7,16 +7,22 @@ export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
     const [players, setPlayers] = useState({})
     const [gameOver, setGameOver] = useState(false); 
+    const [nickname, setNickname] = useState("")
     // const [disableButton, setDisableButton] = useState(false); 
     
     const startGame = () => { 
         setGameOver(false);
         socket.emit("initPlayer");
-
+        socket.emit("setNickname",nickname);
         socket.on("initializedPlayer", (board) => {
             setBoard(board);
         }); 
     };
+    
+    socket.on("playerNickname",(nname)=>
+    {
+        setNickname(nname);
+    });
 
     socket.on("updatedStateBoard", (board) => { 
         setBoard(board);
@@ -170,7 +176,7 @@ export const SuccessLogin = (props) => {
                     Object.entries(players)
                     .map(([key, value]) => 
                         <tr style={{textAlign:"center"}}>
-                            {`${Number(key)+1}) Snake ${value[1].id} has ${value[2]} points \n`}
+                            {/* {`${Number(key)+1}) Snake ${value[1].id} has ${value[2]} points \n`} */}
                         </tr>
                     )
                 }
