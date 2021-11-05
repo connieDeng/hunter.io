@@ -176,7 +176,7 @@ export const SuccessLogin = (props) => {
                     Object.entries(players)
                     .map(([key, value]) => 
                         <tr style={{textAlign:"center"}}>
-                            {/* {`${Number(key)+1}) Snake ${value[1].id} has ${value[2]} points \n`} */}
+                             {`${Number(key)+1}) Snake ${value[1].id} has ${value[2]} points \n`}  
                         </tr>
                     )
                 }
