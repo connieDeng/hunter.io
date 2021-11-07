@@ -75,11 +75,12 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
 
   socket.on("setNickname", (nickname) =>
   {
-    console.log(nickname);
+    
     snake=Utility.returnSnake(socket.id, Game.players);
-    snake.nickname=nickname;    
-    // socket.emit("updatePlayers",snake);
-    // socket.broadcast.emit("updatePlayers",snake);
+    snake.nickname=nickname;
+    console.log(snake);    
+    socket.emit("updatePlayers",snake);
+    socket.broadcast.emit("updatePlayers",snake);
 
   });
 

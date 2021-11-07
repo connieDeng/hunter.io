@@ -53,7 +53,7 @@ class Snake extends Game {
       this.speed = 1;
       this.cords = [];
       this.score = 0;
-      this.nickname='';
+      this.nickname='test';
       // default moving up
       //vertical
       this.dx = -1;
