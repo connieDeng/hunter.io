@@ -1,7 +1,7 @@
 const Utility = require("./utility")
 
-let stateBoard = Utility.createStateBoard(20,20);
-let playerIDs = Utility.createDict(10);
+let stateBoard = Utility.createStateBoard(35,70);
+let playerIDs = {};
 let players = {};
 let numPlayers = 0;
 let apples = {};
@@ -12,23 +12,23 @@ class Game {
     }
     
     createSnake(SOCKET_ID){
-      let id = Utility.getRandomId(playerIDs);
-      let snake = new Snake(id, SOCKET_ID);
+      let randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+      // let id = Utility.getRandomId(playerIDs);
+      let snake = new Snake(SOCKET_ID, randomColor);
       return snake
     }
 
     addSnake(snake){
-      console.log("adding snake with id " + snake.id)
-      let id = snake.id;
-      playerIDs[id] = snake;
+      console.log("adding snake for socket id: " + snake.socket_id)
+      playerIDs[snake.socket_id] = snake;
       players[snake.socket_id] = snake;
-
+      console.log(players)
       let start_cords = Utility.getEmptyCoordsforSnake(stateBoard);
       snake.cords.push(start_cords)
       // we are assuming each snake is 2 pixels (head and body)
       snake.cords.push([start_cords[0]+1, start_cords[1]])
       snake.cords.forEach(element => {
-        stateBoard[element[0]][element[1]] = id;
+        stateBoard[element[0]][element[1]] = snake.socket_id;
       });
     }
 
@@ -46,10 +46,11 @@ class Game {
 
 // GENERAL SNAKE
 class Snake extends Game {
-  constructor(ID, SOCKET_ID) {
-      super(ID, SOCKET_ID);
-      this.id = ID;
+  constructor(SOCKET_ID, COLOR) {
+      super(SOCKET_ID, COLOR);
+      // this.id = ID;
       this.socket_id = SOCKET_ID;
+      this.color = COLOR;
       this.speed = 1;
       this.cords = [];
       this.score = 0;
@@ -99,7 +100,7 @@ class Snake extends Game {
     let y = head_cord[0];
     // console.log(x,y)
     // if out of bounds
-    if (x < 0 || y < 0 || x >= stateBoard.length || y >= stateBoard.length) {
+    if (x < 0 || y < 0 || x >= stateBoard[0].length || y >= stateBoard.length) {
       console.log('boundary hit')
       return 'bounds';
     } else if (stateBoard[head_cord[0]][head_cord[1]] === 'A'){
@@ -130,7 +131,7 @@ class Snake extends Game {
   */
 
   move(GAME, socket) {
-    // console.log('test', socket)
+    console.table(stateBoard)
     let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
     
     if(this.ifCollision(head) === 'bounds' || this.ifCollision(head) === 'snake'){
@@ -146,16 +147,16 @@ class Snake extends Game {
         this.score += 10;
         players[socket.id].score = this.score;
         
-        socket.emit("updatePlayers", Utility.sortOnVals(players));
-        socket.broadcast.emit("updatePlayers", Utility.sortOnVals(players))
+        socket.emit("updatePlayers", players);
+        socket.broadcast.emit("updatePlayers", players);
   
         let old = this.cords[this.cords.length-1];
-        stateBoard[old[0]][old[1]] = this.id;
+        stateBoard[old[0]][old[1]] = socket.id;
       } else {
         let old = this.cords.pop();
         stateBoard[old[0]][old[1]] = -1;
       }
-      stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
+      stateBoard[this.cords[0][0]][this.cords[0][1]] = socket.id;
     }
   }
 
@@ -171,7 +172,7 @@ class Snake extends Game {
     let stringKey = String(appleToDelete[0]) + ',' + String(appleToDelete[1]);
     delete apples[stringKey];
     
-    playerIDs[this.id] = null;
+    playerIDs[this.socket_id] = null;
     delete players[this.socket_id];
   }
 }

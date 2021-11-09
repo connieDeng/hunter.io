@@ -45,8 +45,8 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     GAME.addSnake(SNAKE);
     Game.numPlayers += 1;
     // console.log(SNAKE);
-    socket.emit("updatePlayers", Utility.sortOnVals(Game.players));
-    socket.broadcast.emit("updatePlayers", Utility.sortOnVals(Game.players));
+    socket.emit("updatePlayers", Game.players);
+    socket.broadcast.emit("updatePlayers", Game.players);
 
     GAME.addApple(socket)
     socket.emit("updatedStateBoard", Game.stateBoard);
@@ -82,8 +82,8 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
       snake_to_destroy.destroy()
       socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
 
-      socket.emit("updatePlayers", Utility.sortOnVals(Game.players));
-      socket.broadcast.emit("updatePlayers", Utility.sortOnVals(Game.players));
+      socket.emit("updatePlayers", Game.players);
+      socket.broadcast.emit("updatePlayers", Game.players);
     }
   });
 });
