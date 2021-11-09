@@ -60,7 +60,7 @@ const returnSnake = function (socket_id, playerDict){
 
 const sortOnVals = (dict) => {
     var items = Object.keys(dict).map(function(key) {
-        return [key, dict[key], dict[key].score];
+        return [key, dict[key], dict[key].score, dict[key].nickname];
     });
     
     // Sort the array based on the second element

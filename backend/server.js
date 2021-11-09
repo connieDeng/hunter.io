@@ -40,11 +40,12 @@ var GAME = new Game.Game();
 io.on("connection", (socket) => {// Listens for client for connection and disconnection
   console.log("User connected: " + socket.id);
   
-  socket.on("initPlayer", () => {//returns player obj, otherwise makes new player and increment count
+  socket.on("initPlayer", (nname) => {//returns player obj, otherwise makes new player and increment count
     SNAKE = GAME.createSnake(socket.id);
+    SNAKE.nickname = nname;
     GAME.addSnake(SNAKE);
     Game.numPlayers += 1;
-    // console.log(SNAKE);
+    console.log(SNAKE);
     socket.emit("updatePlayers", Utility.sortOnVals(Game.players));
     socket.broadcast.emit("updatePlayers", Utility.sortOnVals(Game.players));
 
@@ -73,20 +74,23 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     }
   });
 
-  socket.on("setNickname", (nickname) =>
+  // socket.on("setNickname", (nickname) =>
+  // {
+
+  // });
+
+  socket.on("saveNickname", (nname) =>
   {
+    // snake=Utility.returnSnake(socket.id, Game.players);
+    if(Utility.returnSnake(socket.id, Game.players) !== undefined){
+      snake=Utility.returnSnake(socket.id, Game.players);
+      snake.nickname = nname;
+      console.log(snake);
+      socket.emit("updatePlayers", snake);
+      socket.broadcast.emit("updatePlayers", snake);
+    }
+    socket.emit("playerNickname", nname);
     
-    snake=Utility.returnSnake(socket.id, Game.players);
-    snake.nickname=nickname;
-    console.log(snake);    
-    socket.emit("updatePlayers",snake);
-    socket.broadcast.emit("updatePlayers",snake);
-
-  });
-
-  socket.on("saveNickname", (nickname)=>
-  {
-    socket.emit("playerNickname",nickname);
   });
 
   socket.on("disconnect", () => {  

@@ -146,6 +146,7 @@ class Snake extends Game {
         GAME.addApple(socket);
         this.score += 10;
         players[socket.id].score = this.score;
+        players[socket.id].nickname = this.nickname;
         
         socket.emit("updatePlayers", Utility.sortOnVals(players));
         socket.broadcast.emit("updatePlayers", Utility.sortOnVals(players))
