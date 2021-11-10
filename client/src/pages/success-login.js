@@ -7,6 +7,7 @@ export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
     const [players, setPlayers] = useState({})
     const [gameOver, setGameOver] = useState(false); 
+<<<<<<< HEAD
     const [nickname, setNickname] = useState("")
     // const [disableButton, setDisableButton] = useState(false); 
 
@@ -16,6 +17,13 @@ export const SuccessLogin = (props) => {
         setNickname(nname);
     });
 
+=======
+    const [selectedColor, setColor] = useState(null);
+    // const [disableButton, setDisableButton] = useState(false); 
+    
+    let snakeColors = ["lightblue", "darkblue", "red", "yellow", "orange", "purple", "darkgreen", "white"];
+    
+>>>>>>> differentSnake
     const startGame = () => { 
         setGameOver(false);
         console.log("NICKNAME", nickname);
@@ -32,7 +40,12 @@ export const SuccessLogin = (props) => {
 
     socket.on("updatePlayers", (players) => { 
         setPlayers(players);
-        // console.log(players)
+        // for (const [key, value] of Object.entries(players)) {
+        //     console.log(`${key}: ${value}`);
+        // }
+        // setColor(snakeColors[Math.floor(Math.random() * snakeColors.length)]);
+        // console.log(Object.keys(players)[0]);
+        
     });
 
     socket.on("GameOver", () => {
@@ -55,8 +68,8 @@ export const SuccessLogin = (props) => {
     };
 
     let snakeSquare = {
-        backgroundColor: "darkblue",
-        color: "darkblue",
+        // backgroundColor: "darkblue",
+        // color: "white",
         margin: 0,
         padding: 0,
         minWidth: '20px',
@@ -115,6 +128,12 @@ export const SuccessLogin = (props) => {
         textAlign:"center",
     }
 
+    const snakeColorList = Object.entries(players).map(([key, value]) => 
+        <td style={{textAlign:"center", fontSize: '10px'}}>
+            {`${Number(key)+1}) Snake ${value[1].id} has ${snakeColors[value[1].id % 8]} color \n`}
+        </td>
+    )
+
     return(
         <section style={{height:'100vh', backgroundColor:"lightgrey"}}>
         <section className='container' style={container}>
@@ -144,7 +163,12 @@ export const SuccessLogin = (props) => {
                                         ? <td style={emptySqure}>{'●'}</td>
                                         : ( col === 'A'
                                             ? <td style={appleSquare}>{'🍎'}</td> /* apple */
-                                            : <td style={snakeSquare}>{'●'}</td> /* snake */
+                                            : <td style={{backgroundColor: `${snakeColors[board[i][j] % 8]}`, color: `${snakeColors[board[i][j] % 8]}`, margin: 0,
+                                            padding: 0,
+                                            minWidth: '20px',
+                                            minHeight: '20px',
+                                            maxWidth: '20px',
+                                            maxHeight:'20px'}}>{board[i][j]}</td> /* snake */
                                         )
                                     }
                                     {/* <span>
@@ -181,6 +205,14 @@ export const SuccessLogin = (props) => {
                              {`${Number(key)+1}) Snake ${value[1].nickname} has ${value[2]} points \n`}  
                         </tr>
                     )
+                }
+                </table>
+            </section>
+            <section style={leaderBoard}>
+                <div style={{fontWeight:"bold"}}>PLAYERS</div>
+                <table>
+                {
+                    snakeColorList
                 }
                 </table>
             </section>

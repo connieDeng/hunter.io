@@ -45,7 +45,7 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     SNAKE.nickname = nname;
     GAME.addSnake(SNAKE);
     Game.numPlayers += 1;
-    console.log(SNAKE);
+    // console.log(SNAKE);
     socket.emit("updatePlayers", Utility.sortOnVals(Game.players));
     socket.broadcast.emit("updatePlayers", Utility.sortOnVals(Game.players));
 
