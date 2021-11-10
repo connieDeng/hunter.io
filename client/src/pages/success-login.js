@@ -7,7 +7,6 @@ export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
     const [players, setPlayers] = useState({})
     const [gameOver, setGameOver] = useState(false); 
-<<<<<<< HEAD
     const [nickname, setNickname] = useState("")
     // const [disableButton, setDisableButton] = useState(false); 
 
@@ -17,13 +16,11 @@ export const SuccessLogin = (props) => {
         setNickname(nname);
     });
 
-=======
     const [selectedColor, setColor] = useState(null);
     // const [disableButton, setDisableButton] = useState(false); 
     
     let snakeColors = ["lightblue", "darkblue", "red", "yellow", "orange", "purple", "darkgreen", "white"];
     
->>>>>>> differentSnake
     const startGame = () => { 
         setGameOver(false);
         console.log("NICKNAME", nickname);
