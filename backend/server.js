@@ -52,7 +52,7 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     GAME.addApple(socket)
     socket.emit("updatedStateBoard", Game.stateBoard);
     socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
-
+    console.log(Game.numPlayers)
     // socket.emit("updatedStateBoard", Game.stateBoard);
     // socket.broadcast.emit("updatedStateBoard", Game.stateBoard);
     // console.table(Game.stateBoard);
