@@ -132,13 +132,29 @@ export const SuccessLogin = (props) => {
         textAlign:"center",
     }
 
+    let gameOverText = {
+        fontSize: "30px",
+        fontWeight: "bold",
+        justifyContent: "center",
+        alignItems: "center",
+        margin: 0,
+    }
+
+        
     return(
-        <section style={{height:'100vh', backgroundColor:"lightgrey"}}>
+        <section style={{backgroundColor:"lightgrey"}}>
         <section className='container' style={container}>
             <section onKeyDown={(e) => keyHandler(e)} tabIndex="0" style={{paddingTop: '6%', outline: "none"}}>
             <div style={{paddingBottom: '1.5%'}}>
                 <h1 style={{fontSize:"1.5em"}}> {"Hunter.io Free For All"} </h1>
-                <div> {"Press Start Game and control your snake using arrow keys"} </div>
+                {/* <div> {"Press Start Game and control your snake using arrow keys"} </div> */}
+                {gameOver ? 
+                    <div>
+                        <p style={gameOverText}>GAME OVER</p>
+                        <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 10px"}} onClick={startGame}>RESTART</button>
+                    </div>
+                    :  <div> {"Press Start Game and control your snake using arrow keys"} </div>
+                }
            </div>
            <div style={{ display: "flex", alignItems: "center"}}>
            <div style={{padding: '10px', justifyContent: "center", paddingLeft:"30%"}}>
@@ -161,7 +177,8 @@ export const SuccessLogin = (props) => {
                                         ? <td style={emptySqure}>{'●'}</td>
                                         : ( col === 'A'
                                             ? <td style={appleSquare}>{'🍎'}</td> /* apple */
-                                            : <td style={{backgroundColor: `${snakeColors[board[i][j] % 8]}`, color: `${snakeColors[board[i][j] % 8]}`, margin: 0,
+                                            : <td style={{backgroundColor: `${snakeColors[board[i][j] % 8]}`, color: `${snakeColors[board[i][j] % 8]}`,
+                                            margin: 0,
                                             padding: 0,
                                             minWidth: '20px',
                                             minHeight: '20px',
@@ -178,6 +195,7 @@ export const SuccessLogin = (props) => {
                                 </td>
                             ))}
                             </tr>
+                            
                         ))} 
                     </table> :
                     <div style={{
@@ -190,7 +208,6 @@ export const SuccessLogin = (props) => {
                 </div>
         
                 <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={diableStart ? undefined : startGame}>START GAME</button>
-                {gameOver ? <p>GAME OVER</p> :  <p></p>}
            </div>
             
             <section style={leaderBoard}>
