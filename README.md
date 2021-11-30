@@ -35,13 +35,44 @@ To install the necessary prerequisites, you must:
 
 ### Build and Deployment
 
-- to be fixed -
-
-Builds the app for production to the `build` folder.\
+`yarn build` builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+For this project specifically, you will need to:
+- in the backend, `yarn install` all dependencies
+- in client, install all dependencies and run `yarn build`
+
+In the outer directory containing both the backend and client directories, the package.json should contain the scripts as follows:
+
+```
+"scripts": {
+    "build:client": "cd ./client; yarn install && yarn build",
+    "build:server": "cd ./backend; yarn install",
+    "start": "cd ./backend; yarn start",
+    "build": "yarn run build:client && yarn run build:server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+``` 
+ 
+Following, in the backend directory, server.js should contain:
+  
+```
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+app.get('*', (req, res, next) => {
+  // console.log(path.resolve(__dirname, "../client", "build/index.html"));
+  res.sendFile(path.resolve(__dirname, "../client", "build/index.html"))
+});
+
+const socketServerOptions = { };
+if (process.env.NODE_ENV !== "production"){
+  socketServerOptions.cors = { origin: "http://localhost:3000" };
+}
+
+const io = new Server(server, socketServerOptions);
+```
+
+
 
