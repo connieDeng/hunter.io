@@ -7,8 +7,16 @@ export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
     const [players, setPlayers] = useState({})
     const [gameOver, setGameOver] = useState(false); 
+    const [diableStart, setDisableStart] = useState(false);
     const [nickname, setNickname] = useState("")
     // const [disableButton, setDisableButton] = useState(false); 
+
+    //stops screen from moving up and down when up/down keys pressed
+    window.addEventListener("keydown", function(e) {
+        if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+            e.preventDefault();
+        }
+    }, false);
 
     socket.on("playerNickname",(nname)=>
     {
@@ -19,9 +27,10 @@ export const SuccessLogin = (props) => {
     const [selectedColor, setColor] = useState(null);
     // const [disableButton, setDisableButton] = useState(false); 
     
-    let snakeColors = ["lightblue", "darkblue", "red", "yellow", "orange", "purple", "darkgreen", "white"];
+    let snakeColors = ["darkblue", "purple", "darkgreen", "red", "gray", "white", "yellow", "orange"];
     
-    const startGame = () => { 
+    const startGame = () => {
+        setDisableStart(true);
         setGameOver(false);
         console.log("NICKNAME", nickname);
         socket.emit("initPlayer", nickname);
@@ -108,10 +117,8 @@ export const SuccessLogin = (props) => {
 
     let leaderBoard = {
         backgroundColor:'#bcdce8',
-        color: "black",
         width: '12em',
         height:'10em',
-        textAlign: "center",
         marginBottom: '5%',
         marginLeft: '1%',
         border: "2px solid black",
@@ -124,12 +131,6 @@ export const SuccessLogin = (props) => {
         width: "100%",
         textAlign:"center",
     }
-
-    const snakeColorList = Object.entries(players).map(([key, value]) => 
-        <td style={{textAlign:"center", fontSize: '10px'}}>
-            {`${Number(key)+1}) Snake ${value[1].id} has ${snakeColors[value[1].id % 8]} color \n`}
-        </td>
-    )
 
     return(
         <section style={{height:'100vh', backgroundColor:"lightgrey"}}>
@@ -188,29 +189,20 @@ export const SuccessLogin = (props) => {
                 }
                 </div>
         
-                <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={startGame}>START GAME</button>
+                <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={diableStart ? undefined : startGame}>START GAME</button>
                 {gameOver ? <p>GAME OVER</p> :  <p></p>}
            </div>
             
             <section style={leaderBoard}>
                 <div style={{fontWeight:"bold"}}>LEADER BOARD</div>
                 <table>
-                {   (players != undefined) &&
+                {(players != undefined) &&
                     Object.entries(players)
                     .map(([key, value]) => 
-                        <tr style={{textAlign:"center"}}>
-                             {`${Number(key)+1}) Snake ${value[1].nickname} has ${value[2]} points \n`}  
-                        </tr>
-                    )
-                }
-                </table>
-            </section>
-            <section style={leaderBoard}>
-                <div style={{fontWeight:"bold"}}>PLAYERS</div>
-                <table>
-                {
-                    snakeColorList
-                }
+                    <tr style={{textAlign:"center"}}>
+                        {Number(key)+1}) Snake <text style={(value[1].id % 8 < 5) ? {color: "white", backgroundColor: `${snakeColors[value[1].id % 8]}`} : {color: "black", backgroundColor: `${snakeColors[value[1].id % 8]}`}}>{`${value[1].nickname}`}</text> has {`${value[2]}`} points {`\n`}
+                    </tr>
+                )}
                 </table>
             </section>
             </div>
