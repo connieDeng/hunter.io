@@ -1,7 +1,7 @@
 const Utility = require("./utility")
 
-let stateBoard = Utility.createStateBoard(50,70);
-let playerIDs = Utility.createDict(30);
+let stateBoard = Utility.createStateBoard(20,20);
+let playerIDs = Utility.createDict(10);
 let players = {};
 let numPlayers = 0;
 let apples = {};
