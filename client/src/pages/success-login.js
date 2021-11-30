@@ -9,6 +9,7 @@ export const SuccessLogin = (props) => {
     const [gameOver, setGameOver] = useState(false); 
     const [diableStart, setDisableStart] = useState(false);
     const [nickname, setNickname] = useState("")
+    const [direction, setDirection] = useState(null)
     // const [disableButton, setDisableButton] = useState(false); 
 
     //stops screen from moving up and down when up/down keys pressed
@@ -62,16 +63,46 @@ export const SuccessLogin = (props) => {
         // changing the state to the name of the key
       // which is pressed
     //   setKey(event.keyCode);
-      if (event.keyCode === 37){
-        socket.emit("moveSnake", "left");
-      } else if (event.keyCode === 38) {
-        socket.emit("moveSnake", "up");
-      } else if (event.keyCode === 39){
-        socket.emit("moveSnake", "right");
-      } else if (event.keyCode === 40){
-        socket.emit("moveSnake", "down");
-      }
+    //   if (event.keyCode === 37){
+    //     // socket.emit("moveSnake", "left");
+    //     setDirection("left");
+    //   } else if (event.keyCode === 38) {
+    //     // socket.emit("moveSnake", "up");
+    //     setDirection("up");
+    //   } else if (event.keyCode === 39){
+    //     // socket.emit("moveSnake", "right");
+    //     setDirection("right");
+    //   } else if (event.keyCode === 40){
+    //     // socket.emit("moveSnake", "down");
+    //     setDirection("down");
+    //   }
+
+        switch(event.keyCode){
+            case 37:
+                setDirection("left");
+                break;
+            case 38:
+                setDirection("up");
+                break;
+            case 39:
+                setDirection("right");
+                break;
+            case 40:
+                setDirection("down");
+                break;
+        }
     };
+
+    const move = () => {
+        socket.emit("moveSnake", direction);
+    }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          move();
+        }, 150);
+        return () => clearInterval(interval);
+      }, [direction]);
 
     let snakeSquare = {
         // backgroundColor: "darkblue",
