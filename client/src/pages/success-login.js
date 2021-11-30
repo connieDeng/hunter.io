@@ -76,24 +76,27 @@ export const SuccessLogin = (props) => {
     //     // socket.emit("moveSnake", "down");
     //     setDirection("down");
     //   }
-        switch(event.keyCode){
-            case 37:
-                setDirection("left");
-                socket.emit("moveSnake", direction);
-                break;
-            case 38:
-                setDirection("up");
-                socket.emit("moveSnake", direction);
-                break;
-            case 39:
-                setDirection("right");
-                socket.emit("moveSnake", direction);
-                break;
-            case 40:
-                setDirection("down");
-                socket.emit("moveSnake", direction);
-                break;
+        if (event.repeat === false){
+            switch(event.keyCode){
+                case 37:
+                    setDirection("left");
+                    socket.emit("moveSnake", direction);
+                    break;
+                case 38:
+                    setDirection("up");
+                    socket.emit("moveSnake", direction);
+                    break;
+                case 39:
+                    setDirection("right");
+                    socket.emit("moveSnake", direction);
+                    break;
+                case 40:
+                    setDirection("down");
+                    socket.emit("moveSnake", direction);
+                    break;
+            }
         }
+        
     };
 
     const move = () => {
