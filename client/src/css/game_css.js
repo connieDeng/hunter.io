@@ -1,8 +1,3 @@
-let snakeSquare = {
-    
-    
-};
-
 let appleSquare = {
     // backgroundColor: "red",
     overflow: "hidden",
@@ -16,7 +11,6 @@ let appleSquare = {
 }
 
 let emptySqure = {
-    // backgroundColor: "lightgreen",
     color: "#ACDF81",
     margin: 0,
     padding: 0,
@@ -45,4 +39,4 @@ let container = {
     textAlign:"center",
 }
 
-export { container, snakeSquare, appleSquare, emptySqure, leaderBoard};
+export { container, appleSquare, emptySqure, leaderBoard };
