@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import auth from './../components/auth';
 // import changeDirection from './../../../backend/game';
 import socket from "../socket";
+import tile from "./images.png";
+
 
 export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
@@ -215,6 +217,8 @@ export const SuccessLogin = (props) => {
                                         : ( col === 'A'
                                             ? <td style={appleSquare}>{'🍎'}</td> /* apple */
                                             : <td style={{backgroundColor: `${snakeColors[board[i][j] % 8]}`, color: `${snakeColors[board[i][j] % 8]}`,
+                                            backgroundImage: `url(${tile})`,
+                                            backgroundSize: 'contain',
                                             margin: 0,
                                             padding: 0,
                                             minWidth: '20px',
