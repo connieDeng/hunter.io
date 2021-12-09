@@ -7,10 +7,10 @@ export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
     const [players, setPlayers] = useState({})
     const [gameOver, setGameOver] = useState(false); 
-    const [diableStart, setDisableStart] = useState(false);
+    const [disableStart, setDisableStart] = useState(false);
     const [nickname, setNickname] = useState("")
     const [direction, setDirection] = useState(null)
-    // const [disableButton, setDisableButton] = useState(false); 
+
 
     //stops screen from moving up and down when up/down keys pressed
     window.addEventListener("keydown", function(e) {
@@ -47,16 +47,11 @@ export const SuccessLogin = (props) => {
 
     socket.on("updatePlayers", (players) => { 
         setPlayers(players);
-        // for (const [key, value] of Object.entries(players)) {
-        //     console.log(`${key}: ${value}`);
-        // }
-        // setColor(snakeColors[Math.floor(Math.random() * snakeColors.length)]);
-        // console.log(Object.keys(players)[0]);
         
     });
 
     socket.on("GameOver", () => {
-        setGameOver(true);
+        setGameOver(true)
     });
     
     const keyHandler = (event) => {
@@ -185,7 +180,7 @@ export const SuccessLogin = (props) => {
             <div style={{paddingBottom: '1.5%'}}>
                 <h1 style={{fontSize:"1.5em"}}> {"Hunter.io Free For All"} </h1>
                 {/* <div> {"Press Start Game and control your snake using arrow keys"} </div> */}
-                {gameOver ? 
+                {(gameOver && (disableStart)) ? 
                     <div>
                         <p style={gameOverText}>GAME OVER</p>
                         <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 10px"}} onClick={startGame}>RESTART</button>
@@ -243,8 +238,7 @@ export const SuccessLogin = (props) => {
                     borderCollapse: "collapse",}}></div>
                 }
                 </div>
-        
-                <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={diableStart ? undefined : startGame}>START GAME</button>
+                {disableStart ? undefined : <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={startGame}>START GAME</button>}
            </div>
             
             <section style={leaderBoard}>
