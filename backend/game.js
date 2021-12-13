@@ -1,7 +1,7 @@
 const Utility = require("./utility")
 
-let stateBoard = Utility.createStateBoard(50,50);
-let playerIDs = Utility.createDict(10);
+let stateBoard = Utility.createStateBoard(35,80);
+let playerIDs = Utility.createDict(30);
 let players = {};
 let numPlayers = 0;
 let apples = {};
@@ -98,7 +98,6 @@ class Snake extends Game {
   ifCollision(head_cord){
     let x = head_cord[1];
     let y = head_cord[0];
-    // console.log(x,y)
     // if out of bounds
     if (x < 0 || y < 0 || x >= stateBoard[0].length || y >= stateBoard.length) {
       console.log('boundary hit')

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef} from "react";
 import auth from './../components/auth';
 // import changeDirection from './../../../backend/game';
 import socket from "../socket";
+import StartModal from './../components/start-game-modal';
 
 export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
@@ -12,7 +13,6 @@ export const SuccessLogin = (props) => {
     const [direction, setDirection] = useState(null)
     // const [disableButton, setDisableButton] = useState(false); 
     const sectionRef = useRef(null)
-
     //stops screen from moving up and down when up/down keys pressed
     window.addEventListener("keydown", function(e) {
         if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
@@ -29,7 +29,10 @@ export const SuccessLogin = (props) => {
     const [selectedColor, setColor] = useState(null);
     // const [disableButton, setDisableButton] = useState(false); 
     
-    let snakeColors = ["darkblue", "purple", "darkgreen", "red", "gray", "white", "yellow", "orange"];
+    let snakeColors = ["red", "yellow", "orange", "green", "blue", "purple", "pink", "brown", "gray", "darkgreen", 
+        "darkblue", "BlueViolet", "Chartreuse", "DarkGoldenRod", "DarkSalmon", "DarkSlateGrey", "IndianRed", "Khaki", "MediumSeaGreen", "Peru",
+        "RebeccaPurple", "Sienna", "Thistle", "YellowGreen", "SeaShell", "RosyBrown", "Orchid", "MidnightBlue", "LightSalmon", "HoneyDew"
+    ];
     
     const startGame = () => {
         setDisableStart(true);
@@ -55,42 +58,6 @@ export const SuccessLogin = (props) => {
     });
     
     const keyHandler = (event) => {
-<<<<<<< HEAD
-        console.log("IN KEYHANDLER",  direction)
-        switch(event.keyCode){
-            case 37:
-                setDirection("left");
-                socket.emit("moveSnake", direction);
-                break;
-            case 38:
-                setDirection("up");
-                socket.emit("moveSnake", direction);
-                break;
-            case 39:
-                setDirection("right");
-                socket.emit("moveSnake", direction);
-                break;
-            case 40:
-                setDirection("down");
-                socket.emit("moveSnake", direction);
-                break;
-=======
-        // changing the state to the name of the key
-      // which is pressed
-    //   setKey(event.keyCode);
-    //   if (event.keyCode === 37){
-    //     // socket.emit("moveSnake", "left");
-    //     setDirection("left");
-    //   } else if (event.keyCode === 38) {
-    //     // socket.emit("moveSnake", "up");
-    //     setDirection("up");
-    //   } else if (event.keyCode === 39){
-    //     // socket.emit("moveSnake", "right");
-    //     setDirection("right");
-    //   } else if (event.keyCode === 40){
-    //     // socket.emit("moveSnake", "down");
-    //     setDirection("down");
-    //   }
         if (event.repeat === false){
             switch(event.keyCode){
                 case 37:
@@ -110,7 +77,6 @@ export const SuccessLogin = (props) => {
                     socket.emit("moveSnake", direction);
                     break;
             }
->>>>>>> fb780cacfc767a47c309d038f706d91a18a9ff93
         }
         
     };
@@ -126,7 +92,8 @@ export const SuccessLogin = (props) => {
         return () => clearInterval(interval);
       }, [direction]);
 
-    let snakeSquare = {
+
+      let snakeSquare = {
         margin: 0,
         padding: 0,
         minWidth: '20px',
@@ -134,7 +101,6 @@ export const SuccessLogin = (props) => {
         maxWidth: '20px',
         maxHeight:'20px',
     };
-
     let appleSquare = {
         // backgroundColor: "red",
         overflow: "hidden",
@@ -167,12 +133,13 @@ export const SuccessLogin = (props) => {
     }
 
     let leaderBoard = {
-        backgroundColor:'#bcdce8',
-        width: '12em',
+        position:"absolute",
+        top:'5em',
+        right: '6em',
+        textAlign:"center",
+        backgroundColor:'rgb(150, 194, 112, .90)',
+        width: '15em',
         height:'10em',
-        marginBottom: '5%',
-        marginLeft: '1%',
-        border: "2px solid black",
         padding: '1%',
     }
 
@@ -186,36 +153,55 @@ export const SuccessLogin = (props) => {
     let gameOverText = {
         fontSize: "30px",
         fontWeight: "bold",
-        justifyContent: "center",
-        alignItems: "center",
         margin: 0,
     }
 
-        
     return(
-        <section style={{backgroundColor:"lightgrey"}}>
+        <section>
+        <StartModal></StartModal>
+        <h1 style={{fontFamily:'Courier New', fontSize:'2em', margin:".5em", textAlign:'center'}}> 
+            <span style={{color:'purple'}}>Hunter</span>
+            <span style={{color:'yellow'}}>.io </span>
+            <span style={{color:'white'}}>Free For All</span>
+        </h1>
         <section className='container' style={container}>
-            <section ref={sectionRef} onClick={()=> console.log('clicked')}onKeyDown={(e) => keyHandler(e)} tabIndex="0" style={{paddingTop: '6%', outline: "none"}} autoFocus>
-            <div style={{paddingBottom: '1.5%'}}>
-                <h1 style={{fontSize:"1.5em"}}> {"Hunter.io Free For All"} </h1>
-                {gameOver ? 
-                    <div>
-                        <p style={gameOverText}>Start Game</p>
-                        <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 10px"}} onClick={startGame}>PLAY</button>
-                    </div>
-                    :  <div> {"Press Start Game and control your snake using arrow keys"} </div>
-                }
+            <section ref={sectionRef} onClick={()=> console.log('clicked')}onKeyDown={(e) => keyHandler(e)} tabIndex="0" style={{outline: "none"}} autoFocus>
+            <div>
+                <div style={{
+                    position: 'absolute',
+                    left:'45%', 
+                    top:"40%"
+                }}>
+                    {gameOver ? 
+                        <div>
+                            <p style={gameOverText}>Start Game</p>
+                            <button 
+                                style={{backgroundColor: "darkblue", color: "white", border: "none", padding:'1em'}} 
+                                onClick={startGame}>
+                                    PLAY
+                            </button>
+                        </div>
+                        :  <div></div>
+                    }
+                </div>
+                
            </div>
            <div style={{ display: "flex", alignItems: "center"}}>
-           <div style={{padding: '10px', justifyContent: "center"}}>
-                <div>
+           <div>
+                <div
+                style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex:-1,
+                }}>
                 { board !== null ? 
                     <table style={{ 
                         border: "2px solid black",
                         width: '400px',
                         backgroundColor: "#ACDF81",
                         borderCollapse: "collapse",
-                        // border: "0"
                     }}
                     >
                         {board.map((row, i) => (
@@ -244,17 +230,14 @@ export const SuccessLogin = (props) => {
                     </table> :
                     <div style={{
                     border: "2px solid black",
-                    height: '1400px',
-                    width: '1400px',
+                    height: '805px',
+                    width: '1760px',
                     backgroundColor: "#ACDF81",
-                    borderCollapse: "collapse",}}></div>
+                    borderCollapse: "collapse"}}></div>
                 }
                 </div>
         
-                {/* <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={diableStart ? undefined : startGame}>START GAME</button> */}
-           </div>
-            
-            <section style={leaderBoard}>
+                <section style={leaderBoard}>
                 <div style={{fontWeight:"bold"}}>LEADER BOARD</div>
                 <table>
                 {(players != undefined) &&
@@ -266,6 +249,7 @@ export const SuccessLogin = (props) => {
                 )}
                 </table>
             </section>
+           </div>
             </div>
         </section>
         </section>
