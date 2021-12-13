@@ -34,15 +34,17 @@ export const SuccessLogin = (props) => {
         "RebeccaPurple", "Sienna", "Thistle", "YellowGreen", "SeaShell", "RosyBrown", "Orchid", "MidnightBlue", "LightSalmon", "HoneyDew"
     ];
     
-    const startGame = () => {
-        setDisableStart(true);
-        setGameOver(false);
-        sectionRef.current.focus()
-        console.log("NICKNAME", nickname);
-        socket.emit("initPlayer", nickname);
-        socket.on("initializedPlayer", (board) => {
-            setBoard(board);
-        });
+    const startGame = () => {          
+        setTimeout(function() {
+            setDisableStart(true);
+            setGameOver(false);
+            sectionRef.current.focus()
+            console.log("NICKNAME", nickname);
+            socket.emit("initPlayer", nickname);
+            socket.on("initializedPlayer", (board) => {
+                setBoard(board);
+            });
+        }, 1000)
     };
     
     socket.on("updatedStateBoard", (board) => { 
