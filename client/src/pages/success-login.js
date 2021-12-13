@@ -54,10 +54,7 @@ export const SuccessLogin = (props) => {
     });
 
     socket.on("GameOver", () => {
-        setTimeout(function() {
-            setGameOver(true);
-        }, 1000)
-        
+        setGameOver(true);
     });
     
     const keyHandler = (event) => {
