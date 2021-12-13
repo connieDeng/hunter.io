@@ -55,6 +55,7 @@ export const SuccessLogin = (props) => {
     });
     
     const keyHandler = (event) => {
+<<<<<<< HEAD
         console.log("IN KEYHANDLER",  direction)
         switch(event.keyCode){
             case 37:
@@ -73,7 +74,45 @@ export const SuccessLogin = (props) => {
                 setDirection("down");
                 socket.emit("moveSnake", direction);
                 break;
+=======
+        // changing the state to the name of the key
+      // which is pressed
+    //   setKey(event.keyCode);
+    //   if (event.keyCode === 37){
+    //     // socket.emit("moveSnake", "left");
+    //     setDirection("left");
+    //   } else if (event.keyCode === 38) {
+    //     // socket.emit("moveSnake", "up");
+    //     setDirection("up");
+    //   } else if (event.keyCode === 39){
+    //     // socket.emit("moveSnake", "right");
+    //     setDirection("right");
+    //   } else if (event.keyCode === 40){
+    //     // socket.emit("moveSnake", "down");
+    //     setDirection("down");
+    //   }
+        if (event.repeat === false){
+            switch(event.keyCode){
+                case 37:
+                    setDirection("left");
+                    socket.emit("moveSnake", direction);
+                    break;
+                case 38:
+                    setDirection("up");
+                    socket.emit("moveSnake", direction);
+                    break;
+                case 39:
+                    setDirection("right");
+                    socket.emit("moveSnake", direction);
+                    break;
+                case 40:
+                    setDirection("down");
+                    socket.emit("moveSnake", direction);
+                    break;
+            }
+>>>>>>> fb780cacfc767a47c309d038f706d91a18a9ff93
         }
+        
     };
 
     const move = () => {
