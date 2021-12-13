@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import auth from './../components/auth';
 // import changeDirection from './../../../backend/game';
 import socket from "../socket";
@@ -6,11 +6,12 @@ import socket from "../socket";
 export const SuccessLogin = (props) => {
     const [board, setBoard] = useState(null);
     const [players, setPlayers] = useState({})
-    const [gameOver, setGameOver] = useState(false); 
+    const [gameOver, setGameOver] = useState(true); 
     const [diableStart, setDisableStart] = useState(false);
     const [nickname, setNickname] = useState("")
     const [direction, setDirection] = useState(null)
     // const [disableButton, setDisableButton] = useState(false); 
+    const sectionRef = useRef(null)
 
     //stops screen from moving up and down when up/down keys pressed
     window.addEventListener("keydown", function(e) {
@@ -33,9 +34,9 @@ export const SuccessLogin = (props) => {
     const startGame = () => {
         setDisableStart(true);
         setGameOver(false);
+        sectionRef.current.focus()
         console.log("NICKNAME", nickname);
         socket.emit("initPlayer", nickname);
-        // socket.emit("setNickname",nickname);
         socket.on("initializedPlayer", (board) => {
             setBoard(board);
         });
@@ -47,12 +48,6 @@ export const SuccessLogin = (props) => {
 
     socket.on("updatePlayers", (players) => { 
         setPlayers(players);
-        // for (const [key, value] of Object.entries(players)) {
-        //     console.log(`${key}: ${value}`);
-        // }
-        // setColor(snakeColors[Math.floor(Math.random() * snakeColors.length)]);
-        // console.log(Object.keys(players)[0]);
-        
     });
 
     socket.on("GameOver", () => {
@@ -60,22 +55,7 @@ export const SuccessLogin = (props) => {
     });
     
     const keyHandler = (event) => {
-        // changing the state to the name of the key
-      // which is pressed
-    //   setKey(event.keyCode);
-    //   if (event.keyCode === 37){
-    //     // socket.emit("moveSnake", "left");
-    //     setDirection("left");
-    //   } else if (event.keyCode === 38) {
-    //     // socket.emit("moveSnake", "up");
-    //     setDirection("up");
-    //   } else if (event.keyCode === 39){
-    //     // socket.emit("moveSnake", "right");
-    //     setDirection("right");
-    //   } else if (event.keyCode === 40){
-    //     // socket.emit("moveSnake", "down");
-    //     setDirection("down");
-    //   }
+        console.log("IN KEYHANDLER",  direction)
         switch(event.keyCode){
             case 37:
                 setDirection("left");
@@ -108,8 +88,6 @@ export const SuccessLogin = (props) => {
       }, [direction]);
 
     let snakeSquare = {
-        // backgroundColor: "darkblue",
-        // color: "white",
         margin: 0,
         padding: 0,
         minWidth: '20px',
@@ -178,20 +156,19 @@ export const SuccessLogin = (props) => {
     return(
         <section style={{backgroundColor:"lightgrey"}}>
         <section className='container' style={container}>
-            <section onKeyDown={(e) => keyHandler(e)} tabIndex="0" style={{paddingTop: '6%', outline: "none"}}>
+            <section ref={sectionRef} onClick={()=> console.log('clicked')}onKeyDown={(e) => keyHandler(e)} tabIndex="0" style={{paddingTop: '6%', outline: "none"}} autoFocus>
             <div style={{paddingBottom: '1.5%'}}>
                 <h1 style={{fontSize:"1.5em"}}> {"Hunter.io Free For All"} </h1>
-                {/* <div> {"Press Start Game and control your snake using arrow keys"} </div> */}
                 {gameOver ? 
                     <div>
-                        <p style={gameOverText}>GAME OVER</p>
-                        <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 10px"}} onClick={startGame}>RESTART</button>
+                        <p style={gameOverText}>Start Game</p>
+                        <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 10px"}} onClick={startGame}>PLAY</button>
                     </div>
                     :  <div> {"Press Start Game and control your snake using arrow keys"} </div>
                 }
            </div>
            <div style={{ display: "flex", alignItems: "center"}}>
-           <div style={{padding: '10px', justifyContent: "center", paddingLeft:"30%"}}>
+           <div style={{padding: '10px', justifyContent: "center"}}>
                 <div>
                 { board !== null ? 
                     <table style={{ 
@@ -220,12 +197,6 @@ export const SuccessLogin = (props) => {
                                             maxHeight:'20px'}}>{board[i][j]}</td> /* snake */
                                         )
                                     }
-                                    {/* <span>
-                                    {col === -1
-                                        ? <span style={{padding:'5px'}}>{' '}</span>
-                                        : <span>{'U'}</span>
-                                    }
-                                    </span> */}
                                 </td>
                             ))}
                             </tr>
@@ -233,15 +204,15 @@ export const SuccessLogin = (props) => {
                         ))} 
                     </table> :
                     <div style={{
-                        border: "2px solid black",
-                    height: '400px',
-                    width: '400px',
+                    border: "2px solid black",
+                    height: '1400px',
+                    width: '1400px',
                     backgroundColor: "#ACDF81",
                     borderCollapse: "collapse",}}></div>
                 }
                 </div>
         
-                <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={diableStart ? undefined : startGame}>START GAME</button>
+                {/* <button style={{backgroundColor: "darkblue", color: "white", border: "none", padding: "10px 18px", margin: "10px"}} onClick={diableStart ? undefined : startGame}>START GAME</button> */}
            </div>
             
             <section style={leaderBoard}>

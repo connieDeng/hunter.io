@@ -1,6 +1,6 @@
 const Utility = require("./utility")
 
-let stateBoard = Utility.createStateBoard(20,20);
+let stateBoard = Utility.createStateBoard(50,50);
 let playerIDs = Utility.createDict(10);
 let players = {};
 let numPlayers = 0;
@@ -74,22 +74,22 @@ class Snake extends Game {
     const goingLeft = this.dy=== -1;
 
     // console.log(keyPressed)
-    if (keyPressed === "left" && !goingRight){    
+    if (keyPressed === "left" && !goingRight && !goingLeft){    
       this.dx = 0;
       this.dy = -1;  
     }
 
-    if (keyPressed === "up" && !goingDown){    
+    if (keyPressed === "up" && !goingDown && !goingUp){    
       this.dx = -1;
       this.dy = 0;
     }
 
-    if (keyPressed === "right" && !goingLeft){    
+    if (keyPressed === "right" && !goingLeft && !goingRight){    
       this.dx = 0;
       this.dy = 1;
     }
 
-    if (keyPressed === "down" && !goingUp){    
+    if (keyPressed === "down" && !goingUp && !goingDown){    
       this.dx = 1;
       this.dy = 0;
     }
@@ -110,25 +110,6 @@ class Snake extends Game {
       return 'snake';
     }
   }
-
-  /*
-    MOVING FORWARD
-    // moves are: up,down,left,right && turnUp,turnDown,turnLeft,turnRight
-    move() {
-      let head = [this.cords[0][0] + this.dx, this.cords[0][1] + this.dy]
-      this.cords.unshift(head);
-      if(this.ifCollision(head) === 'apple'){
-        this.score += 10;
-        let old = this.cords[this.cords.length-1];
-        stateBoard[old[0]][old[1]] = this.id;
-        game.addApple();
-      } else {
-        let old = this.cords.pop();
-        stateBoard[old[0]][old[1]] = -1;
-      }
-      stateBoard[this.cords[0][0]][this.cords[0][1]] = this.id;
-    }
-  */
 
   move(GAME, socket) {
     // console.log('test', socket)

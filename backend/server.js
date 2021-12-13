@@ -74,11 +74,6 @@ io.on("connection", (socket) => {// Listens for client for connection and discon
     }
   });
 
-  // socket.on("setNickname", (nickname) =>
-  // {
-
-  // });
-
   socket.on("saveNickname", (nname) =>
   {
     // snake=Utility.returnSnake(socket.id, Game.players);
