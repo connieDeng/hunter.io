@@ -34,17 +34,15 @@ export const SuccessLogin = (props) => {
         "RebeccaPurple", "Sienna", "Thistle", "YellowGreen", "SeaShell", "RosyBrown", "Orchid", "MidnightBlue", "LightSalmon", "HoneyDew"
     ];
     
-    const startGame = () => {          
-        setTimeout(function() {
-            setDisableStart(true);
-            setGameOver(false);
-            sectionRef.current.focus()
-            console.log("NICKNAME", nickname);
-            socket.emit("initPlayer", nickname);
-            socket.on("initializedPlayer", (board) => {
-                setBoard(board);
-            });
-        }, 1000)
+    const startGame = () => {
+        setDisableStart(true);
+        setGameOver(false);
+        sectionRef.current.focus()
+        console.log("NICKNAME", nickname);
+        socket.emit("initPlayer", nickname);
+        socket.on("initializedPlayer", (board) => {
+            setBoard(board);
+        });
     };
     
     socket.on("updatedStateBoard", (board) => { 
@@ -56,7 +54,10 @@ export const SuccessLogin = (props) => {
     });
 
     socket.on("GameOver", () => {
-        setGameOver(true);
+        setTimeout(function() {
+            setGameOver(true);
+        }, 1000)
+        
     });
     
     const keyHandler = (event) => {
